@@ -1,0 +1,14 @@
+{
+  "name": "expense-tracker",
+  "version": "1.0.0",
+  "description": "Track and manage monthly expenses",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Curtis Rubeck",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

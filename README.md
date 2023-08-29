@@ -6,7 +6,8 @@
 1. Get postgresql running in a container ✅
 1. Get pgadmin running in a container ✅
 1. Create docker-compose to start both psql and pgadmin ✅
-1. Boostrap the Express backend
+1. Boostrap the Express backend ✅
+1. Create the /accounts api endpoint
 
 ## Run the app
 
