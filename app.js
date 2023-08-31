@@ -1,11 +1,24 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require("express");
+const app = express();
+const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+// GET, POST, PUT, DELETE
+
+const categories = [
+  {
+    category_id: 12345,
+    name: "food",
+  },
+  {
+    category_id: 67890,
+    name: "automotive",
+  },
+];
+
+app.get("/categories", (req, res) => {
+  res.send(categories);
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`App listening on port ${port}`);
+});
