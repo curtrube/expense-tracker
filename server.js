@@ -1,8 +1,7 @@
 const express = require("express");
+const pg = require("pg");
 const app = express();
 const port = 3000;
-
-const pg = require("pg");
 
 // GET, POST, PUT, DELET
 
@@ -28,7 +27,11 @@ app.get("/categories/:id", (req, res) => {
     const query = `SELECT * FROM categories WHERE category_id = ${req.params.id}`;
     client.query(query, (err, resp) => {
       console.log(err ? err.stack : resp.rows[0]);
-      res.send(resp.rows[0]);
+      if (resp.rows[0] != undefined) {
+        res.send(resp.rows[0]);
+      } else {
+        res.send(`No values matching id: ${req.params.id}`);
+      }
       client.end();
     });
   });

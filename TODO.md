@@ -13,7 +13,7 @@
 
 ## API
 
-- [ ] Connect node/express to postgres
+- [x] Connect node/express to postgres
 - [ ] Test send some data to a table and retrieve
 - [ ] Create the /categories api endpoint
 - [ ] Create the /accounts api endpoint
