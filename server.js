@@ -1,7 +1,11 @@
+const bodyParser = require("body-parser");
 const express = require("express");
 const pg = require("pg");
+
 const app = express();
 const port = 3000;
+
+app.use(bodyParser.json());
 
 // GET, POST, PUT, DELET
 
@@ -37,8 +41,19 @@ app.get("/categories/:id", (req, res) => {
   });
 });
 
+// Post to category
+// TODO: only allow JSON
 app.post("/categories", (req, res) => {
-  res.send("Hello from categories POST");
+  const client = new pg.Client();
+  client.connect((err) => {
+    const value = req.body.name;
+    console.log(value);
+    const query = `INSERT INTO categories(name) VALUES('${value}')`;
+    console.log(query);
+    client.query(query, (err, resp) => {
+      console.log(err ? err.stack : resp);
+    });
+  });
 });
 
 app.listen(port, () => {

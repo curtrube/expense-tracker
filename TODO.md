@@ -10,6 +10,7 @@
 
 - [x] Create table schema
 - [x] Create database tables (categories, accounts, transactions)
+- [ ] Implement a connection pool
 
 ## API
 
