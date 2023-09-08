@@ -6,6 +6,7 @@ const pg = require("pg");
 
 // GET, POST, PUT, DELET
 
+// Get all categories
 app.get("/categories", (req, res) => {
   const client = new pg.Client();
   client.connect((err) => {
@@ -20,11 +21,18 @@ app.get("/categories", (req, res) => {
   });
 });
 
-// /categories[id]
-// app.get("/categories/:id", (req, res) => {
-//   client.connect((err) => )
-//   res.send("Hello from categories POST");
-// });
+// Get category by Id
+app.get("/categories/:id", (req, res) => {
+  const client = new pg.Client();
+  client.connect((err) => {
+    const query = `SELECT * FROM categories WHERE category_id = ${req.params.id}`;
+    client.query(query, (err, resp) => {
+      console.log(err ? err.stack : resp.rows[0]);
+      res.send(resp.rows[0]);
+      client.end();
+    });
+  });
+});
 
 app.post("/categories", (req, res) => {
   res.send("Hello from categories POST");
