@@ -3,11 +3,11 @@ const app = express();
 const port = 3000;
 
 const pg = require("pg");
-const client = new pg.Client();
 
 // GET, POST, PUT, DELET
 
 app.get("/categories", (req, res) => {
+  const client = new pg.Client();
   client.connect((err) => {
     console.log("client has connected");
     const query = "SELECT * FROM categories;";
@@ -18,10 +18,6 @@ app.get("/categories", (req, res) => {
       console.log("client has been disconnected");
     });
   });
-});
-
-app.get("/categories2", (req, res) => {
-  res.send("Hello from categories222");
 });
 
 // /categories[id]
