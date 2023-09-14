@@ -1,19 +1,24 @@
 # TODO
 
-[X] Create the github repo ✅
-[X] Get postgresql running in a container ✅
-[X] Get pgadmin running in a container ✅
-[X] Create docker-compose to start both psql and pgadmin ✅
-[X] Boostrap the Express backend ✅
+To track what has been done and what needs to be completed.
+
+## GitHub Repo
+
+- [X] Create the github repo
+- [ ] Create some CI (maybe super-linter - https://github.com/super-linter/super-linter)
 
 ## Database
 
+- [X] Get postgresql running in a container
+- [X] Get pgadmin running in a container
+- [X] Create docker-compose to start both psql and pgadmin ✅
 - [x] Create table schema
 - [x] Create database tables (categories, accounts, transactions)
 - [ ] Implement a connection pool
 
 ## API
 
+- [X] Boostrap the Express backend
 - [x] Connect node/express to postgres
 - [ ] Test send some data to a table and retrieve
 - [ ] Create the /categories api endpoint
@@ -26,3 +31,4 @@
 
 - [ ] Basic web page layout
 - [ ] Create a categories view
+- [ ] Look into NGINX for hosting web page (reverse proxy)
