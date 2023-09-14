@@ -34,15 +34,16 @@ app.get("/categories/:id", (req, res) => {
       if (resp.rows[0] != undefined) {
         res.send(resp.rows[0]);
       } else {
-        res.send(`No values matching id: ${req.params.id}`);
+        res.send(`No values matching id: ${req.params.id}`); // TODO: return this as JSON
       }
       client.end();
     });
   });
 });
 
-// Post to category
+// Create a new category
 // TODO: only allow JSON
+// sanitize inputs
 app.post("/categories", (req, res) => {
   const client = new pg.Client();
   client.connect((err) => {
@@ -55,6 +56,11 @@ app.post("/categories", (req, res) => {
     });
   });
 });
+
+// Bulk update categories
+
+// Update the details of a category is id exists
+app.p;
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);

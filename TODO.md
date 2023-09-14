@@ -19,3 +19,10 @@
 - [ ] Create the /categories api endpoint
 - [ ] Create the /accounts api endpoint
 - [ ] Create the /transactions api endpoint
+- [ ] Read an API design doc - https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design
+- [ ] Implement logging
+
+## Client
+
+- [ ] Basic web page layout
+- [ ] Create a categories view
