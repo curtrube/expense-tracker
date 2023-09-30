@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS "expense-tracker".categories
 (
     category_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     name text COLLATE pg_catalog."default",
-    CONSTRAINT categories_pkey PRIMARY KEY (category_id)
+    CONSTRAINT categories_pkey PRIMARY KEY (category_id),
+    CONSTRAINT name_uq UNIQUE (name)
 )
 
 TABLESPACE pg_default;
