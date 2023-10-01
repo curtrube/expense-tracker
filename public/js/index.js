@@ -1,5 +1,7 @@
+const url = "http://127.0.0.1:3000/categories";
+
 function getCategories() {
-  fetch("http://127.0.0.1:3000/categories")
+  fetch(url)
     .then((response) => response.json())
     .then((data) => createTable(data));
 }
@@ -29,12 +31,28 @@ function createTable(data) {
   root.appendChild(table);
 }
 
-getCategories();
-
 const addCategory = document.getElementById("addCategoryForm");
 addCategory.addEventListener("submit", (e) => {
   e.preventDefault();
   const inputCategory = document.getElementById("inputCategory");
   console.log(inputCategory.value);
+  postCategory(url, inputCategory.value);
   // const data = Object.fromEntries(new FormData(e.target).entries());
 });
+
+function postCategory(url, data) {
+  // check for null or undefined before posting
+  // should also do additional data validation/scrubbing
+  const item = { name: data };
+  console.log(`item: ${item}`);
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+  // return response.json();
+}

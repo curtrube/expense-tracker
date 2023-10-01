@@ -3,8 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Expense Tracker</title>
+    <title>Categories | Expense Tracker</title>
     <link rel="stylesheet" href="../css/bootstrap.css" />
+    <script
+      src="https://kit.fontawesome.com/5517d70628.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -105,6 +109,9 @@
     <div id="root" class="container"></div>
     <script src="../js/bootstrap.js"></script>
     <script src="../js/index.js"></script>
+    <script type="text/javascript">
+      getCategories();
+    </script>
     <script>
       const container = document.getElementById("exampleModal");
       const modal = new bootstrap.Modal(container);

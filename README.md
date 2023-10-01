@@ -12,11 +12,11 @@ docker inspect 93350be904b0 -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}
 docker compose up
 ```
 
+To start the development app
+
 ```bash
 source .env
 ```
-
-To start the development app
 
 ```bash
 npm run dev
@@ -25,7 +25,7 @@ npm run dev
 ## Test API endpoint with CURL
 
 ```
-curl -X POST http://127.0.0.1:3000/categories
-   -H "Content-Type: application/json"
-   -d '{"name":"Test"}'
+curl -X POST http://127.0.0.1:3000/categories \
+   -H "Content-Type: application/json" \
+   -d '{"name":"Test2"}'
 ```
