@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Track and manage monthly expenses",
   "main": "app.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Curtis Rubeck",
@@ -15,7 +16,6 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
-    "prettier": "3.0.3"
+    "nodemon": "^3.0.1"
   }
 }

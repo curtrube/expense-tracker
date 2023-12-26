@@ -9,6 +9,10 @@ app.use(bodyParser.json());
 
 // GET, POST, PUT, DELET
 
+app.get("/", (req, res) => {
+  res.send("<h1>Expense Tracker</h1>")
+})
+
 // Get all categories
 app.get("/categories", (req, res) => {
   const client = new pg.Client();
