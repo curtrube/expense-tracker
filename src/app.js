@@ -1,6 +1,8 @@
-const bodyParser = require("body-parser");
-const express = require("express");
-const pg = require("pg");
+'use strict';
+
+import bodyParser from 'body-parser';
+import express from 'express';
+import pg from 'pg';
 
 const app = express();
 const port = 3000;
@@ -14,18 +16,26 @@ app.get("/", (req, res) => {
 })
 
 // Get all categories
-app.get("/categories", (req, res) => {
-  const client = new pg.Client();
-  client.connect((err) => {
-    console.log("client has connected");
-    const query = "SELECT * FROM categories;";
-    client.query(query, (err, resp) => {
-      console.log(err ? err.stack : resp.rows);
-      res.send(resp.rows);
-      client.end();
-      console.log("client has been disconnected");
-    });
+app.get("/categories", async (req, res) => {
+  const client = new pg.Client({
+    database: "expense_tracker"
   });
+  try {
+    await client.connect();
+    console.log('pg client connected')
+    const query = 'SELECT * FROM expense_tracker.categories;'
+    const result = await client.query(query)
+    if (result.rowCount !== 0) {
+      res.json({ "categories": result.rows })
+    } else {
+      res.json({ "categories": [] })
+    }
+  } catch (error) {
+    console.error('Error querying categories:', error)
+  } finally {
+    await client.end();
+    console.log('pg client disconnected')
+  }
 });
 
 // Get category by Id
@@ -64,7 +74,7 @@ app.post("/categories", (req, res) => {
 // Bulk update categories
 
 // Update the details of a category is id exists
-app.p;
+// app.p;
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
