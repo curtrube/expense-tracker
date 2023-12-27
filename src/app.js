@@ -74,7 +74,7 @@ app.post("/categories", async (req, res) => {
     await client.connect();
     console.log('pg client connected')
     // TODO: input needs to be sanitized
-    // TODO: should we allow duplicate names?
+    // TODO: should we allow duplicate names? probably not
     const categoryName = req.body.name;
     const query = `INSERT INTO expense_tracker.categories(name) VALUES('${categoryName}') RETURNING category_id, name;`;
     const result = await client.query(query)
@@ -91,8 +91,6 @@ app.post("/categories", async (req, res) => {
     console.log('pg client disconnected')
   }
 });
-
-// Bulk update categories
 
 app.put("/categories/:id", async(req, res) => {
   const client = new pg.Client({
@@ -119,6 +117,31 @@ app.put("/categories/:id", async(req, res) => {
     console.log('pg client disconnected')
   }
 });
+
+app.delete("/categories/:id", async(req, res) => {
+  const client = new pg.Client({
+    database: "expense_tracker"
+  });
+  try {
+    await client.connect();
+    console.log('pg client connected')
+    const categoryId = req.params.id;
+    const query = `DELETE FROM expense_tracker.categories WHERE category_id = '${categoryId}' RETURNING category_id, name;`
+    const result = await client.query(query)
+    if (result.rowCount !== 0) {
+      res.status(200).json(result.rows)
+    } else {
+      res.json({ "categories": [] })
+    }
+  }
+  catch (error) {
+    console.errror("Error updating category id:", error)
+  }
+  finally {
+    await client.end();
+    console.log('pg client disconnected')
+  }
+})
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
