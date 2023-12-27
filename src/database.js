@@ -25,7 +25,6 @@ async function createDatabase(database) {
     }
 }
 
-
 async function createSchema(schema) {
     const client = new pg.Client({
         database: databaseName
@@ -50,7 +49,7 @@ async function createSchema(schema) {
     }
 }
 
-async function createTable() {
+async function createCategoryTable() {
     const client = new pg.Client({
         database: databaseName,
     });
@@ -58,8 +57,9 @@ async function createTable() {
         await client.connect();
         const createTableQuery = `
             CREATE TABLE IF NOT EXISTS "expense_tracker".categories (
-                category_id SERIAL PRIMARY KEY,
-                name TEXT
+                category_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+                name text COLLATE pg_catalog."default" NOT NULL,
+                CONSTRAINT categories_pkey PRIMARY KEY (category_id)
             );
         `;
         await client.query(createTableQuery);
@@ -71,4 +71,64 @@ async function createTable() {
     }
 }
 
-await createTable();
+async function createAccountsTable() {
+    const client = new pg.Client({
+        database: databaseName,
+    });
+    try {
+        await client.connect();
+        const createTableQuery = `
+            CREATE TABLE IF NOT EXISTS "expense_tracker".accounts (
+                account_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+                number integer NOT NULL,
+                name text COLLATE pg_catalog."default",
+                bank text COLLATE pg_catalog."default" NOT NULL,
+                CONSTRAINT accounts_pkey PRIMARY KEY (account_id)
+            );
+        `;
+        await client.query(createTableQuery);
+        console.log('Table "accounts" created successfully.');
+    } catch (error) {
+        console.error('Error creating table:', error);
+    } finally {
+        await client.end();
+    }
+}
+
+async function createTransactionsTable() {
+    const client = new pg.Client({
+        database: databaseName,
+    });
+    try {
+        await client.connect();
+        const createTableQuery = `
+            CREATE TABLE IF NOT EXISTS "expense_tracker".transactions (
+                transaction_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+                merchant text COLLATE pg_catalog."default" NOT NULL,
+                amount double precision NOT NULL,
+                date date NOT NULL,
+                account_id integer NOT NULL,
+                category_id integer NOT NULL,
+                CONSTRAINT transactions_pkey PRIMARY KEY (transaction_id),
+                CONSTRAINT account_id FOREIGN KEY (account_id)
+                    REFERENCES "expense_tracker".accounts (account_id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION,
+                CONSTRAINT category_id FOREIGN KEY (category_id)
+                    REFERENCES "expense_tracker".categories (category_id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+            );
+        `;
+        await client.query(createTableQuery);
+        console.log('Table "transactions" created successfully.');
+    } catch (error) {
+        console.error('Error creating table:', error);
+    } finally {
+        await client.end();
+    }
+}
+
+await createCategoryTable();
+await createAccountsTable();
+await createTransactionsTable();
