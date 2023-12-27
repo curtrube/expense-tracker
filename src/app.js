@@ -9,13 +9,18 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-// GET, POST, PUT, DELET
+// GET, POST, PUT, DELETE
+
+// Create - POST
+// Read - GET
+// Update - PUT
+// Delete - DELETE
+
 
 app.get("/", (req, res) => {
   res.send("<h1>Expense Tracker</h1>")
 })
 
-// Get all categories
 app.get("/categories", async (req, res) => {
   const client = new pg.Client({
     database: "expense_tracker"
@@ -38,7 +43,6 @@ app.get("/categories", async (req, res) => {
   }
 });
 
-// Get category by id
 app.get("/categories/:id", async (req, res) => {
   const client = new pg.Client({
     database: "expense_tracker"
@@ -62,7 +66,6 @@ app.get("/categories/:id", async (req, res) => {
   }
 });
 
-// Create category
 app.post("/categories", async (req, res) => {
   const client = new pg.Client({
     database: "expense_tracker"
@@ -91,8 +94,31 @@ app.post("/categories", async (req, res) => {
 
 // Bulk update categories
 
-// Update the details of a category is id exists
-// app.p;
+app.put("/categories/:id", async(req, res) => {
+  const client = new pg.Client({
+    database: "expense_tracker"
+  });
+  try {
+    await client.connect();
+    console.log('pg client connected');
+    const categoryId = req.params.id;
+    const categoryName = req.body.name;
+    const query = `UPDATE expense_tracker.categories SET name = '${categoryName}' WHERE category_id = '${categoryId}' RETURNING category_id, name;`
+    const result = await client.query(query)
+    if (result.rowCount !== 0) {
+      res.status(201).json(result.rows)
+    } else {
+      res.json({ "categories": [] })
+    }
+  }
+  catch (error) {
+    console.errror("Error updating category id:", error)
+  }
+  finally {
+    await client.end();
+    console.log('pg client disconnected')
+  }
+});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
