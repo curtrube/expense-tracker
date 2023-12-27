@@ -26,7 +26,7 @@ app.get("/categories", async (req, res) => {
     const query = 'SELECT * FROM expense_tracker.categories;'
     const result = await client.query(query)
     if (result.rowCount !== 0) {
-      res.json({ "categories": result.rows })
+      res.status(200).json({ "categories": result.rows })
     } else {
       res.json({ "categories": [] })
     }
@@ -38,37 +38,55 @@ app.get("/categories", async (req, res) => {
   }
 });
 
-// Get category by Id
-app.get("/categories/:id", (req, res) => {
-  const client = new pg.Client();
-  client.connect((err) => {
-    const query = `SELECT * FROM categories WHERE category_id = ${req.params.id}`;
-    client.query(query, (err, resp) => {
-      console.log(err ? err.stack : resp.rows[0]);
-      if (resp.rows[0] != undefined) {
-        res.send(resp.rows[0]);
-      } else {
-        res.send(`No values matching id: ${req.params.id}`); // TODO: return this as JSON
-      }
-      client.end();
-    });
+// Get category by id
+app.get("/categories/:id", async (req, res) => {
+  const client = new pg.Client({
+    database: "expense_tracker"
   });
+  try {
+    await client.connect();
+    console.log('pg client connected')
+    const categoryId = req.params.id;
+    const query = `SELECT * FROM expense_tracker.categories WHERE category_id = ${categoryId};`;
+    const result = await client.query(query)
+    if (result.rowCount !== 0) {
+      res.status(200).json({ "categories": result.rows })
+    } else {
+      res.json({ "categories": [] })
+    }
+  } catch (error) {
+    console.error('Error querying categories by id:', error)
+  } finally {
+    await client.end();
+    console.log('pg client disconnected')
+  }
 });
 
-// Create a new category
-// TODO: only allow JSON
-// sanitize inputs
-app.post("/categories", (req, res) => {
-  const client = new pg.Client();
-  client.connect((err) => {
-    const value = req.body.name;
-    console.log(value);
-    const query = `INSERT INTO categories(name) VALUES('${value}')`;
-    console.log(query);
-    client.query(query, (err, resp) => {
-      console.log(err ? err.stack : resp);
-    });
+// Create category
+app.post("/categories", async (req, res) => {
+  const client = new pg.Client({
+    database: "expense_tracker"
   });
+  try {
+    await client.connect();
+    console.log('pg client connected')
+    // TODO: input needs to be sanitized
+    // TODO: should we allow duplicate names?
+    const categoryName = req.body.name;
+    const query = `INSERT INTO expense_tracker.categories(name) VALUES('${categoryName}') RETURNING category_id, name;`;
+    const result = await client.query(query)
+    console.log(result)
+    if (result.rowCount !== 0) {
+      res.status(201).json(result.rows)
+    } else {
+      res.json({ "categories": [] })
+    }
+  } catch (error) {
+    console.error('Error querying categories by id:', error)
+  } finally {
+    await client.end();
+    console.log('pg client disconnected')
+  }
 });
 
 // Bulk update categories
