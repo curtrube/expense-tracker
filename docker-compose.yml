@@ -15,7 +15,7 @@ services:
     ports:
       - "8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: rubeckcurtis@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: Pass123!
+      PGADMIN_DEFAULT_EMAIL: foo@bar.com
+      PGADMIN_DEFAULT_PASSWORD: SuperSecret
     volumes:
       - $PWD/data/pgadmin:/var/lib/pgadmin
