@@ -56,7 +56,7 @@ async function createCategoryTable() {
     try {
         await client.connect();
         const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS "expense_tracker".categories (
+            CREATE TABLE IF NOT EXISTS public.categories (
                 category_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
                 name text COLLATE pg_catalog."default" NOT NULL,
                 CONSTRAINT categories_pkey PRIMARY KEY (category_id)
@@ -78,7 +78,7 @@ async function createAccountsTable() {
     try {
         await client.connect();
         const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS "expense_tracker".accounts (
+            CREATE TABLE IF NOT EXISTS public.accounts (
                 account_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
                 number integer NOT NULL,
                 name text COLLATE pg_catalog."default",
@@ -102,7 +102,7 @@ async function createTransactionsTable() {
     try {
         await client.connect();
         const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS "expense_tracker".transactions (
+            CREATE TABLE IF NOT EXISTS public.transactions (
                 transaction_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
                 merchant text COLLATE pg_catalog."default" NOT NULL,
                 amount double precision NOT NULL,
@@ -111,11 +111,11 @@ async function createTransactionsTable() {
                 category_id integer NOT NULL,
                 CONSTRAINT transactions_pkey PRIMARY KEY (transaction_id),
                 CONSTRAINT account_id FOREIGN KEY (account_id)
-                    REFERENCES "expense_tracker".accounts (account_id) MATCH SIMPLE
+                    REFERENCES public.accounts (account_id) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION,
                 CONSTRAINT category_id FOREIGN KEY (category_id)
-                    REFERENCES "expense_tracker".categories (category_id) MATCH SIMPLE
+                    REFERENCES public.categories (category_id) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION
             );
@@ -129,6 +129,7 @@ async function createTransactionsTable() {
     }
 }
 
+await createDatabase(databaseName);
 await createCategoryTable();
 await createAccountsTable();
 await createTransactionsTable();
