@@ -14,9 +14,7 @@ app.use(bodyParser.json());
 app.use(categories);
 app.use(accounts)
 
-app.get("/", (req, res) => {
-  res.send("<h1>Expense Tracker</h1>")
-})
+app.use('/', express.static('public'))
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
