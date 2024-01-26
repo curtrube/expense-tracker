@@ -32,3 +32,10 @@ To track what has been done and what needs to be completed.
 - [ ] Basic web page layout
 - [ ] Create a categories view
 - [ ] Look into NGINX for hosting web page (reverse proxy)
+
+## New - 1/17
+
+- Add 404 route - Done
+- Add html templating engine, get rid of several .html files
+- Consolidate all routes into one file, so we don't have multiple imports in app.js
+- Work on View/Front end functionality
