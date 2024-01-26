@@ -36,6 +36,6 @@ To track what has been done and what needs to be completed.
 ## New - 1/17
 
 - Add 404 route - Done
-- Add html templating engine, get rid of several .html files
+- Add html templating engine, get rid of several .html files - wait on this, may use something like react instead.
 - Consolidate all routes into one file, so we don't have multiple imports in app.js
 - Work on View/Front end functionality

@@ -2,10 +2,7 @@
 
 import bodyParser from 'body-parser';
 import express from 'express';
-
-import categories from './routes/categories.js';
-import accounts from './routes/accounts.js';
-import notFound from './routes/notFound.js';
+import routes from './routes/index.js';
 
 const app = express();
 const port = 3000;
@@ -14,9 +11,9 @@ app.use(bodyParser.json());
 
 app.use('/', express.static('public'));
 
-app.use(categories);
-app.use(accounts);
-app.use(notFound);
+app.use(routes.categories);
+app.use(routes.accounts);
+app.use(routes.notFound);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
