@@ -103,7 +103,6 @@
             <button
               type="button"
               class="btn btn-primary"
-              data-bs-dismiss="modal"
               onclick="handleSubmit(event)"
             >
               Submit
@@ -118,12 +117,18 @@
     </div>
     <script src="./js/bootstrap.js"></script>
     <script>
+      const myModal = new bootstrap.Modal(
+        document.getElementById('exampleModal')
+      );
+      const form = document.getElementById('addCategoryForm');
+
       function clearThis() {
         const inputField = document.getElementById('inputCategory');
         inputField.value = '';
       }
-      
+
       function handleCancel() {
+        console.log('form cancelled');
         clearThis();
       }
 
@@ -134,10 +139,8 @@
         const data = Object.fromEntries(new FormData(form).entries());
         console.log(data);
         clearThis();
+        myModal.hide();
       }
-
-      const form = document.getElementById('addCategoryForm');
-      form.addEventListener('submit', handleSubmit);
 
       form.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
