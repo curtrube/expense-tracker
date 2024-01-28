@@ -69,9 +69,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Create New Category
-            </h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Create New</h1>
             <button
               type="button"
               class="btn-close"
@@ -82,12 +80,15 @@
           <!-- Modal Body -->
           <div class="modal-body">
             <form action="" id="addCategoryForm" onsubmit="handleSubmit()">
-              <label for="inputCategory" class="form-label">Name</label>
+              <label for="inputCategory" class="form-label"
+                >Category Name</label
+              >
               <input
                 class="form-control"
                 type="text"
                 name="addCategoryInput"
                 id="inputCategory"
+                required
               />
             </form>
           </div>
@@ -121,10 +122,18 @@
         document.getElementById('exampleModal')
       );
       const form = document.getElementById('addCategoryForm');
+      let displayRequiredMsg = false;
 
       function clearThis() {
         const inputField = document.getElementById('inputCategory');
         inputField.value = '';
+        if (displayRequiredMsg) {
+          document
+            .getElementById('inputCategory')
+            .classList.remove('is-invalid');
+          document.getElementById('inputCategoryMissing').remove();
+        }
+        displayRequiredMsg = false;
       }
 
       function handleCancel() {
@@ -135,17 +144,43 @@
       function handleSubmit(e) {
         e.preventDefault();
         console.log('form submitted');
+        // This is duplicate and can probably be removed
         const form = document.getElementById('addCategoryForm');
         const data = Object.fromEntries(new FormData(form).entries());
         console.log(data);
-        clearThis();
-        myModal.hide();
+
+        // Check if input field is null or empty
+        if (data.addCategoryInput == null || data.addCategoryInput == '') {
+          console.log('missing required fields');
+
+          if (!displayRequiredMsg) {
+            document
+              .getElementById('inputCategory')
+              .classList.add('is-invalid');
+            const errorMsg = document.createElement('small');
+            errorMsg.setAttribute('id', 'inputCategoryMissing');
+            errorMsg.classList.add('text-danger');
+            errorMsg.innerHTML = 'Missing required category name.';
+            form.append(errorMsg);
+            displayRequiredMsg = true;
+          }
+        } else {
+          myModal.hide();
+          clearThis();
+        }
       }
 
       form.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           handleSubmit(e);
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          clearThis();
         }
       });
     </script>
