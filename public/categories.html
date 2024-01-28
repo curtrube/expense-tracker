@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="./css/bootstrap.css" />
     <link rel="stylesheet" href="./css/reset.css" />
   </head>
-
   <body>
     <!-- Nav -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -49,7 +48,7 @@
         </div>
       </div>
     </nav>
-    <!-- Button trigger modal -->
+    <!-- Create button trigger modal -->
     <button
       type="button"
       class="btn btn-success"
@@ -112,7 +111,6 @@
         </div>
       </div>
     </div>
-
     <div>
       <ul id="expenseData"></ul>
     </div>
@@ -143,7 +141,7 @@
 
       function handleSubmit(e) {
         e.preventDefault();
-        console.log('form submitted');
+
         // This is duplicate and can probably be removed
         const form = document.getElementById('addCategoryForm');
         const data = Object.fromEntries(new FormData(form).entries());
@@ -165,6 +163,11 @@
             displayRequiredMsg = true;
           }
         } else {
+          const newCategory = {
+            name: data.addCategoryInput,
+          };
+          addCategory(newCategory);
+          console.log('form submitted');
           myModal.hide();
           clearThis();
         }
@@ -183,19 +186,39 @@
           clearThis();
         }
       });
-    </script>
-    <script>
-      fetch('http://localhost:3000/categories')
-        .then((response) => response.json())
-        .then((data) => {
-          const expenseData = document.getElementById('expenseData');
 
-          data['categories'].forEach((element) => {
-            let li = document.createElement('li');
-            li.innerHTML = element.name;
-            expenseData.append(li);
-          });
+      function addCategory(item) {
+        fetch('http://localhost:3000/categories', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(item),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data));
+
+          getCategories();
+      }
+
+      function getCategories() {
+        fetch('http://localhost:3000/categories')
+          .then((response) => response.json())
+          .then((data) => displayCategories(data));
+      }
+
+      function displayCategories(data) {
+        const expenseData = document.getElementById('expenseData');
+
+        data.categories.forEach((element) => {
+          let li = document.createElement('li');
+          li.innerHTML = element.name;
+          expenseData.append(li);
         });
+      }
+
+      getCategories();
     </script>
   </body>
 </html>
