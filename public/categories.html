@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Categories | Expense Tracker</title>
     <link rel="icon" type="image/x-icon" href="./favicon.svg" />
-    <link rel="stylesheet" href="./css/bootstrap.css" />
     <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/bootstrap.css" />
   </head>
   <body>
     <!-- Nav -->
@@ -57,7 +57,7 @@
     >
       Create
     </button>
-    <!-- Modal -->
+    <!-- Create new modal -->
     <div
       class="modal fade"
       id="exampleModal"
@@ -68,7 +68,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Create New</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Create Category
+            </h1>
             <button
               type="button"
               class="btn-close"
@@ -79,9 +81,7 @@
           <!-- Modal Body -->
           <div class="modal-body">
             <form action="" id="addCategoryForm" onsubmit="handleSubmit()">
-              <label for="inputCategory" class="form-label"
-                >Category Name</label
-              >
+              <label for="inputCategory" class="form-label">Name</label>
               <input
                 class="form-control"
                 type="text"
@@ -111,25 +111,104 @@
         </div>
       </div>
     </div>
-    <div>
-      <ul id="expenseData"></ul>
+    <!-- Edit category modal -->
+    <div
+      class="modal fade"
+      id="editModal"
+      tabindex="-1"
+      aria-labelledby="editCategoryModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="editeCategoryModal">
+              Edit Category
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <form action="" id="editCategoryForm">
+              <label for="editCategoryName" class="form-label">Name</label>
+              <input
+                class="form-control"
+                type="text"
+                name="editCategoryInput"
+                id="editCategoryName"
+                required
+              />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              onclick="handleCancel()"
+            >
+              Cancel
+            </button>
+            <button type="button" class="btn btn-primary" id="editCategorySave">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div id="displayCategories"></div>
+
+    <!-- Category card template -->
+    <template id="categoryCard">
+      <div class="card d-flex flex-row align-items-center" id="card">
+        <div class="card-body"><p class="mb-0">Hello World</p></div>
+        <div class="p-3">
+          <button id="edit" class="btn btn-sm btn-outline-secondary">
+            Edit
+          </button>
+        </div>
+        <div class="p-3">
+          <button id="delete" class="btn btn-sm btn-outline-danger">
+            Delete
+          </button>
+        </div>
+      </div>
+    </template>
+
     <script src="./js/bootstrap.js"></script>
     <script>
       const myModal = new bootstrap.Modal(
         document.getElementById('exampleModal')
       );
+      const editModal = new bootstrap.Modal(
+        document.getElementById('editModal')
+      );
       const form = document.getElementById('addCategoryForm');
       let displayRequiredMsg = false;
 
       function clearThis() {
+        // Clear add new category
         const inputField = document.getElementById('inputCategory');
-        inputField.value = '';
+        const editInputField = document.getElementById('editCategoryName');
+
         if (displayRequiredMsg) {
+          inputField.value = '';
           document
             .getElementById('inputCategory')
             .classList.remove('is-invalid');
           document.getElementById('inputCategoryMissing').remove();
+
+          document
+            .getElementById('editCategoryName')
+            .classList.remove('is-invalid');
+          document.getElementById('editCategoryMissing').remove();
+          console.log('clearing missing field error');
         }
         displayRequiredMsg = false;
       }
@@ -145,7 +224,6 @@
         // This is duplicate and can probably be removed
         const form = document.getElementById('addCategoryForm');
         const data = Object.fromEntries(new FormData(form).entries());
-        console.log(data);
 
         // Check if input field is null or empty
         if (data.addCategoryInput == null || data.addCategoryInput == '') {
@@ -173,6 +251,53 @@
         }
       }
 
+      function saveChanges(categoryId, categoryName) {
+        // event.preventDefault();
+        console.log(
+          `Entered saveChanges() with ${categoryId}, ${categoryName}`
+        );
+
+        const editForm = document.getElementById('editCategoryForm');
+        const data = Object.fromEntries(new FormData(editForm).entries());
+
+        console.log(data.editCategoryInput);
+
+        if (data.editCategoryInput == null || data.editCategoryInput == '') {
+          console.log('missing required edit fields');
+
+          if (!displayRequiredMsg) {
+            document
+              .getElementById('editCategoryName')
+              .classList.add('is-invalid');
+            const errorMsg = document.createElement('small');
+            errorMsg.setAttribute('id', 'editCategoryMissing');
+            errorMsg.classList.add('text-danger');
+            errorMsg.innerHTML = 'Missing required category name.';
+            editForm.append(errorMsg);
+            displayRequiredMsg = true;
+          }
+        } else {
+          const category = {
+            name: data.editCategoryInput,
+          };
+          updateCategory(categoryId, category);
+          console.log('form submitted');
+          editModal.hide();
+        }
+      }
+
+      function handleEdit(categoryId, categoryName) {
+        console.log(`Entered handleEdit() with ${categoryId}, ${categoryName}`);
+        document.getElementById('editCategoryName').value = categoryName;
+        document
+          .getElementById('editCategorySave')
+          .setAttribute(
+            'onclick',
+            `saveChanges(${categoryId}, '${categoryName}')`
+          );
+        editModal.show();
+      }
+
       form.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
@@ -197,9 +322,35 @@
           body: JSON.stringify(item),
         })
           .then((response) => response.json())
-          .then((data) => console.log(data));
+          .then((data) => console.log(data))
+          .then(() => getCategories());
+      }
 
-          getCategories();
+      function updateCategory(categoryId, categoryName) {
+        fetch(`http://localhost:3000/categories/${categoryId}`, {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(categoryName),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .then(() => getCategories());
+      }
+
+      function deleteCategory(categoryId) {
+        fetch(`http://localhost:3000/categories/${categoryId}`, {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .then(() => getCategories());
       }
 
       function getCategories() {
@@ -209,12 +360,27 @@
       }
 
       function displayCategories(data) {
-        const expenseData = document.getElementById('expenseData');
+        const displayCategories = document.getElementById('displayCategories');
+        displayCategories.innerHTML = '';
+        const template = document.querySelector('#categoryCard');
 
         data.categories.forEach((element) => {
-          let li = document.createElement('li');
-          li.innerHTML = element.name;
-          expenseData.append(li);
+          console.log(element);
+          const clone = template.content.cloneNode(true);
+          clone.getElementById('card').setAttribute('id', element.category_id);
+          let p = clone.querySelectorAll('p');
+          p[0].textContent = element.name;
+          const editBtn = clone.getElementById('edit');
+          editBtn.setAttribute(
+            'onclick',
+            `handleEdit(${element.category_id}, '${element.name}')`
+          );
+          const deleteBtn = clone.getElementById('delete');
+          deleteBtn.setAttribute(
+            'onclick',
+            `deleteCategory(${element.category_id})`
+          );
+          displayCategories.appendChild(clone);
         });
       }
 
