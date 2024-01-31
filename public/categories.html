@@ -204,9 +204,8 @@
         // Clear add new category
         const inputField = document.getElementById('inputCategory');
         const editInputField = document.getElementById('editCategoryName');
-
+        inputField.value = '';
         if (displayRequiredMsg) {
-          inputField.value = '';
           document
             .getElementById('inputCategory')
             .classList.remove('is-invalid');
