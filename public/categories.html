@@ -89,24 +89,24 @@
                 id="inputCategory"
                 required
               />
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  onclick="handleCancel()"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onclick="handleSubmit(event)"
+                >
+                  Submit
+                </button>
+              </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              onclick="handleCancel()"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onclick="handleSubmit(event)"
-            >
-              Submit
-            </button>
           </div>
         </div>
       </div>
@@ -143,20 +143,24 @@
                 id="editCategoryName"
                 required
               />
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  onclick="handleCancel()"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  id="editCategorySave"
+                >
+                  Save
+                </button>
+              </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              onclick="handleCancel()"
-            >
-              Cancel
-            </button>
-            <button type="button" class="btn btn-primary" id="editCategorySave">
-              Save
-            </button>
           </div>
         </div>
       </div>
@@ -297,13 +301,6 @@
           );
         editModal.show();
       }
-
-      form.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          handleSubmit(e);
-        }
-      });
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
