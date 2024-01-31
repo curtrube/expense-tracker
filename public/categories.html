@@ -196,6 +196,10 @@
       const form = document.getElementById('addCategoryForm');
       let displayRequiredMsg = false;
 
+      document.body.addEventListener('shown.bs.modal', function (event) {
+        document.getElementById('inputCategory').focus();
+      });
+
       function clearThis() {
         // Clear add new category
         const inputField = document.getElementById('inputCategory');
@@ -300,6 +304,11 @@
             `saveChanges(${categoryId}, '${categoryName}')`
           );
         editModal.show();
+
+        // must use a delay to focus "fade in" the modal doesn’t let you set focus on input.
+        setTimeout(() => {
+          document.getElementById('editCategoryName').focus();
+        }, 500);
       }
 
       document.addEventListener('keydown', (e) => {
