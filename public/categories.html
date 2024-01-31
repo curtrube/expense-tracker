@@ -48,129 +48,132 @@
         </div>
       </div>
     </nav>
-    <!-- Create button trigger modal -->
-    <button
-      type="button"
-      class="btn btn-success"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal"
-    >
-      Create
-    </button>
-    <!-- Create new modal -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Create Category
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <!-- Modal Body -->
-          <div class="modal-body">
-            <form action="" id="addCategoryForm" onsubmit="handleSubmit()">
-              <label for="inputCategory" class="form-label">Name</label>
-              <input
-                class="form-control"
-                type="text"
-                name="addCategoryInput"
-                id="inputCategory"
-                required
-              />
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                  onclick="handleCancel()"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  onclick="handleSubmit(event)"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
+    <div class="container">
+      <div class="mt-2 mb-2">
+        <!-- New button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          New
+        </button>
+      </div>
+      <!-- Create new modal -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Create Category
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <form action="" id="addCategoryForm" onsubmit="handleSubmit()">
+                <label for="inputCategory" class="form-label">Name</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="addCategoryInput"
+                  id="inputCategory"
+                  required
+                />
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                    onclick="handleCancel()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    onclick="handleSubmit(event)"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Edit category modal -->
-    <div
-      class="modal fade"
-      id="editModal"
-      tabindex="-1"
-      aria-labelledby="editCategoryModal"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="editeCategoryModal">
-              Edit Category
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <!-- Modal Body -->
-          <div class="modal-body">
-            <form action="" id="editCategoryForm">
-              <label for="editCategoryName" class="form-label">Name</label>
-              <input
-                class="form-control"
-                type="text"
-                name="editCategoryInput"
-                id="editCategoryName"
-                required
-              />
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                  onclick="handleCancel()"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  id="editCategorySave"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
+      <!-- Edit category modal -->
+      <div
+        class="modal fade"
+        id="editModal"
+        tabindex="-1"
+        aria-labelledby="editCategoryModal"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="editeCategoryModal">
+                Edit Category
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <form action="" id="editCategoryForm">
+                <label for="editCategoryName" class="form-label">Name</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="editCategoryInput"
+                  id="editCategoryName"
+                  required
+                />
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                    onclick="handleCancel()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="editCategorySave"
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
+
+      <div id="displayCategories"></div>
     </div>
-
-    <div id="displayCategories"></div>
-
     <!-- Category card template -->
     <template id="categoryCard">
-      <div class="card d-flex flex-row align-items-center" id="card">
+      <div class="card d-flex flex-row align-items-center mb-2" id="card">
         <div class="card-body"><p class="mb-0">Hello World</p></div>
         <div class="p-3">
           <button id="edit" class="btn btn-sm btn-outline-secondary">
@@ -186,6 +189,7 @@
     </template>
 
     <script src="./js/bootstrap.js"></script>
+
     <script>
       const myModal = new bootstrap.Modal(
         document.getElementById('exampleModal')
