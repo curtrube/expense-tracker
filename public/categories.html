@@ -364,8 +364,20 @@
         displayCategories.innerHTML = '';
         const template = document.querySelector('#categoryCard');
 
+        // sort categories alphabetically
+        data.categories.sort(function (a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+
+        console.log(data)
+
         data.categories.forEach((element) => {
-          console.log(element);
           const clone = template.content.cloneNode(true);
           clone.getElementById('card').setAttribute('id', element.category_id);
           let p = clone.querySelectorAll('p');
