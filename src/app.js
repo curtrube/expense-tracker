@@ -13,6 +13,7 @@ app.use('/', express.static('public'));
 
 app.use(routes.categories);
 app.use(routes.accounts);
+app.use(routes.transactions);
 app.use(routes.notFound);
 
 app.listen(port, () => {

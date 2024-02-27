@@ -15,8 +15,7 @@ class AccountModel {
 
   create = async (accountNumber, accountName, accountBank) => {
     const sql = `
-            INSERT INTO
-            accounts(number, name, bank) 
+            INSERT INTO accounts(number, name, bank) 
             VALUES('${accountNumber}', '${accountName}', '${accountBank}')
             RETURNING account_id, number, name, bank
             `;
