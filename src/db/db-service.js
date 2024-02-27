@@ -1,4 +1,5 @@
 import pg from 'pg';
+import { Config } from '../configs/config.js';
 
 class DBService {
   constructor({ host, user, password, database }) {
@@ -39,4 +40,5 @@ class DBService {
   }
 };
 
-export default DBService;
+const dbService = new DBService(Config)
+export default dbService;
