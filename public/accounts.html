@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Categories | Expense Tracker</title>
+    <title>Accounts | Expense Tracker</title>
     <link rel="icon" type="image/x-icon" href="./favicon.svg" />
     <link rel="stylesheet" href="./css/reset.css" />
     <link rel="stylesheet" href="./css/bootstrap.css" />
@@ -63,24 +63,24 @@
           type="button"
           class="btn btn-success"
           data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          data-bs-target="#newAccountModal"
         >
           New
         </button>
       </div>
-      <!-- Create new modal -->
+      <!-- New Account modal -->
       <div
         class="modal fade"
-        id="exampleModal"
+        id="newAccountModal"
         tabindex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="newAccountModal"
         aria-hidden="true"
       >
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Create Category
+                Add Account
               </h1>
               <button
                 type="button"
@@ -91,13 +91,30 @@
             </div>
             <!-- Modal Body -->
             <div class="modal-body">
-              <form action="" id="addCategoryForm" onsubmit="handleSubmit()">
-                <label for="inputCategory" class="form-label">Name</label>
+              <form action="" id="addAccountForm" onsubmit="handleSubmit()">
+                <label for="accountName" class="form-label">Name</label>
                 <input
                   class="form-control"
                   type="text"
-                  name="addCategoryInput"
-                  id="inputCategory"
+                  name="accountName"
+                  id="accountName"
+                  required
+                />
+                <label for="accountNumber" class="form-label">Account Number</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="accountNumber"
+                  id="accountNumber"
+                  required
+                />
+
+                <label for="accountBank" class="form-label">Bank</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="accountBank"
+                  id="accountBank"
                   required
                 />
                 <div class="modal-footer">
@@ -122,19 +139,19 @@
           </div>
         </div>
       </div>
-      <!-- Edit category modal -->
+      <!-- Edit account modal -->
       <div
         class="modal fade"
-        id="editModal"
+        id="editAccountModal"
         tabindex="-1"
-        aria-labelledby="editCategoryModal"
+        aria-labelledby="editAccountModal"
         aria-hidden="true"
       >
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="editeCategoryModal">
-                Edit Category
+              <h1 class="modal-title fs-5" id="editAccountModal">
+                Edit Account Details
               </h1>
               <button
                 type="button"
@@ -145,13 +162,30 @@
             </div>
             <!-- Modal Body -->
             <div class="modal-body">
-              <form action="" id="editCategoryForm">
-                <label for="editCategoryName" class="form-label">Name</label>
+              <form action="" id="editAccountForm">
+                <label for="editAccountName" class="form-label">Name</label>
                 <input
                   class="form-control"
                   type="text"
-                  name="editCategoryInput"
-                  id="editCategoryName"
+                  name="accountName"
+                  id="editAccountName"
+                  required
+                />
+                <label for="editAccountNumber" class="form-label">Account Number</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="accountNumber"
+                  id="editAccountNumber"
+                  required
+                />
+
+                <label for="editAccountBank" class="form-label">Bank</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="accountBank"
+                  id="editAccountBank"
                   required
                 />
                 <div class="modal-footer">
@@ -166,7 +200,7 @@
                   <button
                     type="submit"
                     class="btn btn-primary"
-                    id="editCategorySave"
+                    id="editAccountSave"
                   >
                     Save
                   </button>
@@ -177,18 +211,30 @@
         </div>
       </div>
 
-      <div id="displayCategories"></div>
+      <div id="displayAccounts" class="d-flex flex-row"></div>
     </div>
-    <!-- Category card template -->
-    <template id="categoryCard">
-      <div class="card d-flex flex-row align-items-center mb-2" id="card">
-        <div class="card-body"><p class="mb-0">Hello World</p></div>
-        <div class="p-3">
+    <!-- Account details card template -->
+    <template id="accountDetailsCard">
+      <div class="card me-3" style="width: 18rem" id="card">
+        <div class="card-body">
+          <h5
+            class="card-title"
+            id="accountName"
+            style="text-transform: capitalize"
+          >
+            Savings
+          </h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary" id="accountBank">
+            FNBO
+          </h6>
+          <h6 class="card-subtitle mb-2 text-body-secondary" id="accountNumber">
+            Account#: 1234567890
+          </h6>
+        </div>
+        <div>
           <button id="edit" class="btn btn-sm btn-outline-secondary">
             Edit
           </button>
-        </div>
-        <div class="p-3">
           <button id="delete" class="btn btn-sm btn-outline-danger">
             Delete
           </button>
@@ -199,17 +245,17 @@
     <script src="./js/bootstrap.js"></script>
 
     <script>
-      const myModal = new bootstrap.Modal(
-        document.getElementById('exampleModal')
+      const newAccountModal = new bootstrap.Modal(
+        document.getElementById('newAccountModal')
       );
       const editModal = new bootstrap.Modal(
-        document.getElementById('editModal')
+        document.getElementById('editAccountModal')
       );
       const form = document.getElementById('addCategoryForm');
       let displayRequiredMsg = false;
 
       document.body.addEventListener('shown.bs.modal', function (event) {
-        document.getElementById('inputCategory').focus();
+        document.getElementById('newAccountModal').focus();
       });
 
       function clearThis() {
@@ -241,39 +287,49 @@
         e.preventDefault();
 
         // This is duplicate and can probably be removed
-        const form = document.getElementById('addCategoryForm');
-        const data = Object.fromEntries(new FormData(form).entries());
+        const accountForm = document.getElementById('addAccountForm');
+        const data = Object.fromEntries(new FormData(accountForm).entries());
 
-        // Check if input field is null or empty
-        if (data.addCategoryInput == null || data.addCategoryInput == '') {
-          console.log('missing required fields');
+        // TODO: perform form input validation on required fields
 
-          if (!displayRequiredMsg) {
-            document
-              .getElementById('inputCategory')
-              .classList.add('is-invalid');
-            const errorMsg = document.createElement('small');
-            errorMsg.setAttribute('id', 'inputCategoryMissing');
-            errorMsg.classList.add('text-danger');
-            errorMsg.innerHTML = 'Missing required category name.';
-            form.append(errorMsg);
-            displayRequiredMsg = true;
-          }
-        } else {
-          const newCategory = {
-            name: data.addCategoryInput,
-          };
-          addCategory(newCategory);
-          console.log('form submitted');
-          myModal.hide();
-          clearThis();
-        }
+        const newAccountData = {
+          number: data.accountNumber,
+          name: data.accountName,
+          bank: data.accountBank,
+        };
+        addAccount(newAccountData);
+        newAccountModal.hide();
+
+        // // Check if input field is null or empty
+        // if (data.addCategoryInput == null || data.addCategoryInput == '') {
+        //   console.log('missing required fields');
+
+        //   if (!displayRequiredMsg) {
+        //     document
+        //       .getElementById('inputCategory')
+        //       .classList.add('is-invalid');
+        //     const errorMsg = document.createElement('small');
+        //     errorMsg.setAttribute('id', 'inputCategoryMissing');
+        //     errorMsg.classList.add('text-danger');
+        //     errorMsg.innerHTML = 'Missing required category name.';
+        //     form.append(errorMsg);
+        //     displayRequiredMsg = true;
+        //   }
+        // } else {
+        //   const newCategory = {
+        //     name: data.addCategoryInput,
+        //   };
+        //   addCategory(newCategory);
+        //   console.log('form submitted');
+        //   myModal.hide();
+        //   clearThis();
+        // }
       }
 
-      function saveChanges(categoryId, categoryName) {
-        // event.preventDefault();
+      function saveChanges(accountId, accountName) {
+        e.preventDefault();
         console.log(
-          `Entered saveChanges() with ${categoryId}, ${categoryName}`
+          `Entered saveChanges() with ${accountId}, ${accountName}`
         );
 
         const editForm = document.getElementById('editCategoryForm');
@@ -305,20 +361,21 @@
         }
       }
 
-      function handleEdit(categoryId, categoryName) {
-        console.log(`Entered handleEdit() with ${categoryId}, ${categoryName}`);
-        document.getElementById('editCategoryName').value = categoryName;
+      function handleEdit(accountId, accountName, accountNumber, accountBank) {
+        document.getElementById('editAccountName').value = accountName;
+        document.getElementById('editAccountNumber').value = accountNumber;
+        document.getElementById('editAccountBank').value = accountBank;
         document
-          .getElementById('editCategorySave')
+          .getElementById('editAccountSave')
           .setAttribute(
             'onclick',
-            `saveChanges(${categoryId}, '${categoryName}')`
+            `saveChanges(${accountId}, '${accountName}')`
           );
         editModal.show();
 
         // must use a delay to focus "fade in" the modal doesn’t let you set focus on input.
         setTimeout(() => {
-          document.getElementById('editCategoryName').focus();
+          document.getElementById('editAccountName').focus();
         }, 500);
       }
 
@@ -329,8 +386,9 @@
         }
       });
 
-      function addCategory(item) {
-        fetch('http://localhost:3000/categories', {
+      function addAccount(item) {
+        console.log(`Inside addAccount() with item ${Object.keys(item)}`);
+        fetch('http://localhost:3000/accounts', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -340,25 +398,25 @@
         })
           .then((response) => response.json())
           .then((data) => console.log(data))
-          .then(() => getCategories());
+          .then(() => getAccounts());
       }
 
-      function updateCategory(categoryId, categoryName) {
-        fetch(`http://localhost:3000/categories/${categoryId}`, {
+      function updateAccount(accountId, accountName) {
+        fetch(`http://localhost:3000/accounts/${accountId}`, {
           method: 'PUT',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(categoryName),
+          body: JSON.stringify(accountName),
         })
           .then((response) => response.json())
           .then((data) => console.log(data))
-          .then(() => getCategories());
+          .then(() => getAccounts());
       }
 
-      function deleteCategory(categoryId) {
-        fetch(`http://localhost:3000/categories/${categoryId}`, {
+      function deleteAccount(accountId) {
+        fetch(`http://localhost:3000/accounts/${accountId}`, {
           method: 'DELETE',
           headers: {
             Accept: 'application/json',
@@ -367,22 +425,22 @@
         })
           .then((response) => response.json())
           .then((data) => console.log(data))
-          .then(() => getCategories());
+          .then(() => getAccounts());
       }
 
-      function getCategories() {
-        fetch('http://localhost:3000/categories')
+      function getAccounts() {
+        fetch('http://localhost:3000/accounts')
           .then((response) => response.json())
-          .then((data) => displayCategories(data));
+          .then((data) => displayAccounts(data));
       }
 
-      function displayCategories(data) {
-        const displayCategories = document.getElementById('displayCategories');
-        displayCategories.innerHTML = '';
-        const template = document.querySelector('#categoryCard');
+      function displayAccounts(data) {
+        const displayAccounts = document.getElementById('displayAccounts');
+        displayAccounts.innerHTML = '';
+        const template = document.querySelector('#accountDetailsCard');
 
-        // sort categories alphabetically
-        data.categories.sort(function (a, b) {
+        // sort alphabetically
+        data.accounts.sort(function (a, b) {
           if (a.name < b.name) {
             return -1;
           }
@@ -392,28 +450,31 @@
           return 0;
         });
 
-        console.log(data);
-
-        data.categories.forEach((element) => {
+        data.accounts.forEach((element) => {
+          console.log(element)
           const clone = template.content.cloneNode(true);
-          clone.getElementById('card').setAttribute('id', element.category_id);
-          let p = clone.querySelectorAll('p');
-          p[0].textContent = element.name;
+          clone.getElementById('card').setAttribute('id', element.account_id);
+          let cardAccountName = clone.querySelectorAll('#accountName');
+          cardAccountName[0].textContent = element.name;
+          let cardAccountBank = clone.querySelectorAll('#accountBank');
+          cardAccountBank[0].textContent = element.bank;
+          let cardAccountNumber = clone.querySelectorAll('#accountNumber');
+          cardAccountNumber[0].textContent = `Account# ${element.number}`;
           const editBtn = clone.getElementById('edit');
           editBtn.setAttribute(
             'onclick',
-            `handleEdit(${element.category_id}, '${element.name}')`
+            `handleEdit(${element.account_id}, '${element.name}', ${element.number}, '${element.bank}')`
           );
           const deleteBtn = clone.getElementById('delete');
           deleteBtn.setAttribute(
             'onclick',
-            `deleteCategory(${element.category_id})`
+            `deleteCategory(${element.account_id})`
           );
-          displayCategories.appendChild(clone);
+          displayAccounts.appendChild(clone);
         });
       }
 
-      getCategories();
+      getAccounts();
     </script>
   </body>
 </html>

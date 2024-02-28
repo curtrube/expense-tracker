@@ -37,5 +37,14 @@ To track what has been done and what needs to be completed.
 
 - Add 404 route - Done
 - Add html templating engine, get rid of several .html files - wait on this, may use something like react instead.
-- Consolidate all routes into one file, so we don't have multiple imports in app.js
-- Work on View/Front end functionality
+- Consolidate all routes into one file, so we don't have multiple imports in app.js - Done
+- Work on View/Front end functionality - Create category modal working
+
+
+## 1/31
+
+- sort categories alphabetically - Done
+- when editing a category 'enter' should submit the form - Done
+- when editing auto focus the input - Done
+- fix: new category input form not cleared after submitting with 'enter' key - Done
+- feat: add a confirm before deleting a category
