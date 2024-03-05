@@ -17,6 +17,8 @@ class DBService {
       const result = await client.query(query);
       // TODO: add some error checking?
       return result.rows;
+    } catch (err) {
+      console.error(err);
     } finally {
       client.release();
     }

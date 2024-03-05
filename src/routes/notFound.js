@@ -2,8 +2,6 @@
 
 import { Router } from 'express';
 
-console.log('inside routes/notFound.js');
-
 const notFound = Router();
 
 notFound.get('*', function (req, res) {

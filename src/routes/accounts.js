@@ -9,8 +9,6 @@ import {
   deleteAccount,
 } from '../controllers/accounts.js';
 
-console.log('inside routes/accounts.js');
-
 const accounts = Router();
 
 accounts.get('/accounts', getAccounts);

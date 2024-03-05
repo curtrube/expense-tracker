@@ -10,8 +10,6 @@ import {
   updateCategory,
 } from '../controllers/categories.js';
 
-console.log('inside routes/categories.js');
-
 const categories = Router();
 
 categories.get('/categories', getCategories);

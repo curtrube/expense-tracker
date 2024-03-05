@@ -12,7 +12,7 @@ export const getTransactions = async (req, res) => {
       res.status(204).json({ transactions: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 export const getTransaction = async (req, res) => {
@@ -26,7 +26,7 @@ export const getTransaction = async (req, res) => {
       res.status(204).json({ transactions: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 export const createTransaction = async (req, res) => {
@@ -48,7 +48,7 @@ export const createTransaction = async (req, res) => {
       res.status(201).json({ transactions: results });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 export const updateTransaction = async (req, res) => {
@@ -71,10 +71,10 @@ export const updateTransaction = async (req, res) => {
     if (results.length !== 0) {
       res.status(201).json({ transactions: results });
     } else {
-        res.json({ transactions: [] })
+      res.json({ transactions: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 export const deleteTransaction = async (req, res) => {
@@ -86,6 +86,6 @@ export const deleteTransaction = async (req, res) => {
       res.status(202).json({ transactions: results });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

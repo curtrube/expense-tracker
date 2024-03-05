@@ -9,10 +9,10 @@ export const getAccounts = async (req, res) => {
     if (results.length !== 0) {
       res.status(200).json({ accounts: results });
     } else {
-      res.status(204).json({ accounts: [] })
+      res.status(204).json({ accounts: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -24,10 +24,10 @@ export const getAccount = async (req, res) => {
     if (results.length !== 0) {
       res.status(200).json({ accounts: results });
     } else {
-      res.status(204).json({ accounts: [] })
+      res.status(204).json({ accounts: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -51,7 +51,7 @@ export const createAccount = async (req, res) => {
       res.json({ accounts: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -75,7 +75,7 @@ export const updateAccount = async (req, res) => {
       res.json({ accounts: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -90,6 +90,6 @@ export const deleteAccount = async (req, res) => {
       res.json({ accounts: [] });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
