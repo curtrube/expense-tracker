@@ -20,9 +20,9 @@ services:
     volumes:
       - $PWD/data/pgadmin:/var/lib/pgadmin
   expense-backend:
-    image: expense:1
+    image: expense-tracker:latest
     container_name: expense-backend
     ports:
-      - '8080:3000'
+      - '8080:80'
     environment:
       PGHOST: postgres

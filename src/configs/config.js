@@ -1,4 +1,4 @@
-export const Config = {
+export const dbConfig = {
   host: process.env.PGHOST || 'localhost',
   port: process.env.PGPORT || 5432,
   user: process.env.PGUSER || 'postgres',
