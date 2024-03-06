@@ -4,7 +4,12 @@ import dbService from '../services/dbService.js';
 
 class TransactionModel {
   findAll = async () => {
-    const sql = `SELECT * FROM transactions;`;
+    const sql = `
+      SELECT transaction_id, date, merchant, amount, accounts.name as account, categories.name as category
+      FROM transactions
+      LEFT JOIN accounts on (transactions.account_id = accounts.account_id)
+      LEFT JOIN categories on (transactions.category_id = categories.category_id);
+    `;
     return await dbService.query(sql);
   };
   findOne = async (transactionId) => {
