@@ -5,6 +5,7 @@ import { logger } from './middleware/logEvents.js';
 import accountsRouter from './routes/accounts.js';
 import categoriesRouter from './routes/categories.js';
 import transactionsRouter from './routes/transactions.js';
+import errorRouter from './routes/error.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.use('/', express.static('public'));
 app.use(accountsRouter);
 app.use(categoriesRouter);
 app.use(transactionsRouter);
+app.use(errorRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
