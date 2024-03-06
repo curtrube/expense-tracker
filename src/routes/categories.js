@@ -1,7 +1,4 @@
-'use strict';
-
 import { Router } from 'express';
-
 import {
   getCategories,
   getCategory,
@@ -10,12 +7,12 @@ import {
   updateCategory,
 } from '../controllers/categories.js';
 
-const categories = Router();
+const router = Router();
 
-categories.get('/categories', getCategories);
-categories.get('/categories/:id', getCategory);
-categories.post('/categories/', createCategory);
-categories.put('/categories/:id', updateCategory);
-categories.delete('/categories/:id', deleteCategory);
+router.get('/categories', getCategories);
+router.get('/categories/:id', getCategory);
+router.post('/categories/', createCategory);
+router.put('/categories/:id', updateCategory);
+router.delete('/categories/:id', deleteCategory);
 
-export default categories;
+export default router;

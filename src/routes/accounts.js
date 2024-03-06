@@ -1,5 +1,3 @@
-'use strict';
-
 import { Router } from 'express';
 import {
   getAccounts,
@@ -9,12 +7,12 @@ import {
   deleteAccount,
 } from '../controllers/accounts.js';
 
-const accounts = Router();
+const router = Router();
 
-accounts.get('/accounts', getAccounts);
-accounts.get('/accounts/:id', getAccount);
-accounts.post('/accounts', createAccount);
-accounts.put('/accounts/:id', updateAccount);
-accounts.delete('/accounts/:id', deleteAccount);
+router.get('/accounts', getAccounts);
+router.get('/accounts/:id', getAccount);
+router.post('/accounts', createAccount);
+router.put('/accounts/:id', updateAccount);
+router.delete('/accounts/:id', deleteAccount);
 
-export default accounts;
+export default router;

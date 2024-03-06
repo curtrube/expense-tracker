@@ -1,8 +1,10 @@
 import express from 'express';
-import routes from './routes/index.js';
 import cors from 'cors';
 import { corsOptions } from './configs/corsOptions.js';
 import { logger } from './middleware/logEvents.js';
+import accountsRouter from './routes/accounts.js';
+import categoriesRouter from './routes/categories.js';
+import transactionsRouter from './routes/transactions.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,10 +20,10 @@ app.use(express.json());
 // serve static files
 app.use('/', express.static('public'));
 
-app.use(routes.categories);
-app.use(routes.accounts);
-app.use(routes.transactions);
-app.use(routes.notFound);
+// api routes
+app.use(accountsRouter);
+app.use(categoriesRouter);
+app.use(transactionsRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);

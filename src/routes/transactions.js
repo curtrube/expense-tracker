@@ -1,5 +1,3 @@
-'use strict';
-
 import { Router } from 'express';
 import {
   createTransaction,
@@ -9,11 +7,12 @@ import {
   updateTransaction,
 } from '../controllers/transactions.js';
 
-const transactions = Router();
-transactions.get('/transactions', getTransactions);
-transactions.get('/transactions/:id', getTransaction);
-transactions.post('/transactions', createTransaction);
-transactions.put('/transactions/:id', updateTransaction);
-transactions.delete('/transactions/:id', deleteTransaction);
+const router = Router();
 
-export default transactions;
+router.get('/transactions', getTransactions);
+router.get('/transactions/:id', getTransaction);
+router.post('/transactions', createTransaction);
+router.put('/transactions/:id', updateTransaction);
+router.delete('/transactions/:id', deleteTransaction);
+
+export default router;
