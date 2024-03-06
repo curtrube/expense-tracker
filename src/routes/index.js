@@ -6,8 +6,8 @@ import transactions from './transactions.js';
 import notFound from './notFound.js';
 
 export default {
-    categories,
-    accounts,
-    transactions,
-    notFound
+  categories,
+  accounts,
+  transactions,
+  notFound,
 };
