@@ -1,6 +1,6 @@
 'use strict';
 
-import dbService from '../db/db-service.js';
+import dbService from '../services/dbService.js';
 
 class AccountModel {
   findAll = async () => {
