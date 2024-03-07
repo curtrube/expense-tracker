@@ -1,4 +1,4 @@
-const whiteList = ['http://127.0.0.1', 'http://localhost'];
+const whiteList = ['http://127.0.0.1', 'http://localhost:5173'];
 export const corsOptions = {
   origin: function (origin, callback) {
     // TODO: before moving to production update whitelist and remove || !origin
