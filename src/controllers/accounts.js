@@ -1,5 +1,3 @@
-'use strict';
-
 import AccountModel from '../models/accountModel.js';
 
 export const getAccounts = async (req, res) => {
@@ -17,10 +15,10 @@ export const getAccounts = async (req, res) => {
 };
 
 export const getAccount = async (req, res) => {
-  const accountId = req.params.id;
+  const { id } = req.params;
   const accountModel = new AccountModel();
   try {
-    const results = await accountModel.findOne(accountId);
+    const results = await accountModel.findOne(id);
     if (results.length !== 0) {
       res.status(200).json({ accounts: results });
     } else {
@@ -33,18 +31,11 @@ export const getAccount = async (req, res) => {
 
 export const createAccount = async (req, res) => {
   // TODO: input needs to be sanitized
-  // TODO: should we allow duplicate names? probably not
-  // TODO: is there a better way to init or get body params?
-  const accountNumber = req.body.number;
-  const accountName = req.body.name;
-  const accountBank = req.body.bank;
+  // TODO: should we allow duplicate accounts?
+  const { number, name, bank } = req.body;
   const accountModel = new AccountModel();
   try {
-    const results = await accountModel.create(
-      accountNumber,
-      accountName,
-      accountBank
-    );
+    const results = await accountModel.create(number, name, bank);
     if (results.length !== 0) {
       res.status(201).json({ accounts: results });
     } else {
@@ -56,19 +47,11 @@ export const createAccount = async (req, res) => {
 };
 
 export const updateAccount = async (req, res) => {
-  // TODO: All these params are required, make some optional?
-  const accountId = req.params.id;
-  const accountNumber = req.body.number;
-  const accountName = req.body.name;
-  const accountBank = req.body.bank;
+  const { id } = req.params;
+  const { number, name, bank } = req.body;
   const accountModel = new AccountModel();
   try {
-    const results = await accountModel.update(
-      accountId,
-      accountNumber,
-      accountName,
-      accountBank
-    );
+    const results = await accountModel.update(id, number, name, bank);
     if (results.length !== 0) {
       res.status(201).json({ accounts: results });
     } else {
@@ -80,10 +63,10 @@ export const updateAccount = async (req, res) => {
 };
 
 export const deleteAccount = async (req, res) => {
-  const accountId = req.params.id;
+  const { id } = req.params;
   const accountModel = new AccountModel();
   try {
-    const results = await accountModel.delete(accountId);
+    const results = await accountModel.delete(id);
     if (results.length !== 0) {
       res.status(202).json({ accounts: results });
     } else {

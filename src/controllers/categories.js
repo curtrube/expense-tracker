@@ -1,5 +1,3 @@
-'use strict';
-
 import CategoryModel from '../models/categoryModel.js';
 
 export const getCategories = async (req, res) => {
@@ -17,10 +15,10 @@ export const getCategories = async (req, res) => {
 };
 
 export const getCategory = async (req, res) => {
-  const categoryId = req.params.id;
+  const { id } = req.params;
   const categoryModel = new CategoryModel();
   try {
-    const results = await categoryModel.findOne(categoryId);
+    const results = await categoryModel.findOne(id);
     if (results.length !== 0) {
       res.status(200).json({ categories: results });
     }
@@ -32,10 +30,10 @@ export const getCategory = async (req, res) => {
 export const createCategory = async (req, res) => {
   // TODO: input needs to be sanitized
   // TODO: should we allow duplicate names? probably not
-  const categoryName = req.body.name;
+  const { name } = req.body;
   const categoryModel = new CategoryModel();
   try {
-    const results = await categoryModel.create(categoryName);
+    const results = await categoryModel.create(name);
     if (results.length !== 0) {
       res.status(201).json({ categories: results });
     }
@@ -45,11 +43,11 @@ export const createCategory = async (req, res) => {
 };
 
 export const updateCategory = async (req, res) => {
-  const categoryId = req.params.id;
-  const categoryName = req.body.name;
+  const { id } = req.params;
+  const { name } = req.body;
   const categoryModel = new CategoryModel();
   try {
-    const results = await categoryModel.update(categoryId, categoryName);
+    const results = await categoryModel.update(id, name);
     if (results.length !== 0) {
       res.status(201).json({ categories: results });
     }
@@ -59,10 +57,10 @@ export const updateCategory = async (req, res) => {
 };
 
 export const deleteCategory = async (req, res) => {
-  const categoryId = req.params.id;
+  const { id } = req.params;
   const categoryModel = new CategoryModel();
   try {
-    const results = await categoryModel.delete(categoryId);
+    const results = await categoryModel.delete(id);
     if (results.length !== 0) {
       res.status(202).json({ categories: results });
     }
