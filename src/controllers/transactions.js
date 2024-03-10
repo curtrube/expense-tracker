@@ -1,5 +1,3 @@
-'use strict';
-
 import TransactionModel from '../models/transactionModel.js';
 
 export const getTransactions = async (req, res) => {
@@ -16,10 +14,10 @@ export const getTransactions = async (req, res) => {
   }
 };
 export const getTransaction = async (req, res) => {
-  const transactionId = req.params.id;
+  const { id } = req.params;
   const transactionModel = new TransactionModel();
   try {
-    const results = await transactionModel.findOne(transactionId);
+    const results = await transactionModel.findOne(id);
     if (results.length !== 0) {
       res.status(200).json({ transactions: results });
     } else {
@@ -30,11 +28,7 @@ export const getTransaction = async (req, res) => {
   }
 };
 export const createTransaction = async (req, res) => {
-  const merchant = req.body.merchant;
-  const amount = req.body.amount;
-  const date = req.body.date;
-  const accountId = req.body.accountId;
-  const categoryId = req.body.categoryId;
+  const { merchant, amount, date, accountId, categoryId } = req.body;
   const transactionModel = new TransactionModel();
   try {
     const results = await transactionModel.create(
@@ -52,16 +46,12 @@ export const createTransaction = async (req, res) => {
   }
 };
 export const updateTransaction = async (req, res) => {
-  const transactionId = req.params.id;
-  const merchant = req.body.merchant;
-  const amount = req.body.amount;
-  const date = req.body.date;
-  const accountId = req.body.accountId;
-  const categoryId = req.body.categoryId;
+  const { id } = req.params;
+  const { merchant, amount, date, accountId, categoryId } = req.body;
   const transactionModel = new TransactionModel();
   try {
     const results = await transactionModel.update(
-      transactionId,
+      id,
       merchant,
       amount,
       date,
@@ -78,10 +68,10 @@ export const updateTransaction = async (req, res) => {
   }
 };
 export const deleteTransaction = async (req, res) => {
-  const transactionId = req.params.id;
+  const { id } = req.params;
   const transactionModel = new TransactionModel();
   try {
-    const results = await transactionModel.delete(transactionId);
+    const results = await transactionModel.delete(id);
     if (results.lenght !== 0) {
       res.status(202).json({ transactions: results });
     }

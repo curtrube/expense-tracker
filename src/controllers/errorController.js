@@ -1,3 +1,5 @@
-export default function index(req, res) {
-  res.send('Error not found');
-}
+const error = async (req, res) => {
+  res.json({ message: 'Error route not found' });
+};
+
+export default error;

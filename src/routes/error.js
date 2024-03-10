@@ -1,8 +1,8 @@
-import errorController from '../controllers/errorController.js';
+import error from '../controllers/errorController.js';
 import { Router } from 'express';
 
 const router = Router();
 
-router.get('*', errorController);
+router.get('*', error);
 
 export default router;
