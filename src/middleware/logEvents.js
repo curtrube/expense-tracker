@@ -7,7 +7,7 @@ export const logEvents = async (message, logName) => {
   const dateTime = new Date().toISOString();
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  const logsDir = path.join(__dirname, '..', 'logs');
+  const logsDir = path.join(__dirname, '../../', 'logs');
   const logItem = `${dateTime} ${message}\n`;
   try {
     if (!fs.existsSync(logsDir)) {
