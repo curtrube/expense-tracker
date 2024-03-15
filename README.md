@@ -1,33 +1,20 @@
 # Expense Tracker
 
-## Run the app
+`Expense Tracker` simplifies the management of your finances by effortlessly monitoring and organizing your expenses, helping you stay on top of your spending habits.
 
-Get the IP address of the postgres container
+## Build the container
 
 ```bash
-docker inspect 93350be904b0 -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+docker build -t expense-tracker:v1 .
 ```
+
+## Run the app
 
 ```bash
 docker compose up
 ```
 
-```bash
-source .env
-```
-
-To start the development app
-
-```bash
-npm run dev
-```
-
 ## Query the API using curl
-
-Create - POST
-Read - GET
-Update - PUT
-Delete - DELETE
 
 Read
 
@@ -66,6 +53,7 @@ erDiagram
 ```
 
 ## Classes
+
 ```mermaid
 ---
 title: Transaction Class
@@ -79,6 +67,7 @@ classDiagram
     Transaction : +Int account_id
     Transaction : +Int category_id
 ```
+
 ```mermaid
 ---
 title: Account Class
@@ -89,6 +78,7 @@ classDiagram
     Account : +Text name
     Account : +Text bank
 ```
+
 ```mermaid
 ---
 title: Category Class
