@@ -5,6 +5,7 @@ import { logger } from './middleware/logEvents.js';
 import accountsRouter from './routes/accounts.js';
 import categoriesRouter from './routes/categories.js';
 import transactionsRouter from './routes/transactions.js';
+import usersRouter from './routes/users.js';
 import errorRouter from './routes/error.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -25,8 +26,6 @@ app.use(express.json());
 // serve static files
 app.use('/', express.static('public'));
 
-const users = [];
-
 const posts = [
   {
     user: 'curtis',
@@ -37,20 +36,6 @@ const posts = [
     post: 'hello alexalex',
   },
 ];
-
-app.post('/user', async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = { username: username, password: hashedPassword };
-    users.push(user);
-    res
-      .status(201)
-      .send(`${user.username} created with password ${user.password}`);
-  } catch (err) {
-    console.error(err);
-  }
-});
 
 app.post('/login', async (req, res) => {
   const user = users.find((u) => u.username === req.body.username);
@@ -96,6 +81,7 @@ function authenticateToken(req, res, next) {
 app.use(accountsRouter);
 app.use(categoriesRouter);
 app.use(transactionsRouter);
+app.use(usersRouter);
 app.use(errorRouter);
 
 app.listen(port, () => {
