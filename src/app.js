@@ -7,7 +7,6 @@ import categoriesRouter from './routes/categories.js';
 import transactionsRouter from './routes/transactions.js';
 import usersRouter from './routes/users.js';
 import errorRouter from './routes/error.js';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 
@@ -36,26 +35,6 @@ const posts = [
     post: 'hello alexalex',
   },
 ];
-
-app.post('/login', async (req, res) => {
-  const user = users.find((u) => u.username === req.body.username);
-  if (user === null) {
-    res.status(500).json({ message: 'user not found' });
-  }
-  try {
-    console.log(req.headers);
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '15s',
-      });
-      res.status(200).json({ accessToken: accessToken });
-    } else {
-      res.status(401).json({ message: 'username and password does not match' });
-    }
-  } catch (err) {
-    console.error(err);
-  }
-});
 
 app.get('/posts', authenticateToken, (req, res) => {
   console.log(req);
