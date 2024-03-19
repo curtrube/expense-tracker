@@ -36,6 +36,9 @@ const posts = [
   },
 ];
 
+import { login } from './controllers/authController.js';
+app.post('/login', login);
+
 app.get('/posts', authenticateToken, (req, res) => {
   console.log(req);
   res

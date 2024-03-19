@@ -17,7 +17,7 @@ export const getUser = async (req, res) => {
   const { username } = req.body;
   try {
     const user = await userModel.find(username);
-    console.log(user.find((u) => u.username === username));
+    // console.log(user.find((u) => u.username === username));
     res.status(200).json({ users: user });
   } catch (err) {
     console.error(`Error in userController getUser(): ${err}`);

@@ -8,7 +8,7 @@ class UserModel {
 
   find = async (username) => {
     const sql = `
-        SELECT user_id, username 
+        SELECT user_id, username, password 
         FROM users 
         WHERE username = '${username}';
     `;

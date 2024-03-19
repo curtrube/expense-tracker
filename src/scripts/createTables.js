@@ -133,3 +133,11 @@ await createDatabase(databaseName);
 await createCategoryTable();
 await createAccountsTable();
 await createTransactionsTable();
+
+
+CREATE Table public.users(
+    user_id uuid DEFAULT gen_random_uuid() not null UNIQUE, 
+    username text not null UNIQUE, 
+    password text not null, 
+    CONSTRAINT users_pkey PRIMARY KEY (user_id)
+    );
