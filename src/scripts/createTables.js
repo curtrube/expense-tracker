@@ -67,9 +67,10 @@ const createTransactionsTable = async () => {
 const createUsersTable = async () => {
   const sql = `
     CREATE Table public.users(
-      user_id uuid DEFAULT gen_random_uuid() not null UNIQUE, 
-      username text not null UNIQUE, 
-      password text not null, 
+        user_id uuid DEFAULT gen_random_uuid() not null UNIQUE, 
+        username text not null UNIQUE, 
+        password text not null, 
+        refresh_token text,
       CONSTRAINT users_pkey PRIMARY KEY (user_id)
     );
   `;
@@ -81,4 +82,4 @@ const createUsersTable = async () => {
 // await createCategoryTable();
 // await createAccountsTable();
 // await createTransactionsTable();
-// await createUsersTable();
+await createUsersTable();

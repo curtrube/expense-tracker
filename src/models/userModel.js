@@ -23,6 +23,16 @@ class UserModel {
     return await dbService.query(sql);
   };
 
+  updateRefreshToken = async (username, refreshToken) => {
+    const sql = `
+      UPDATE users 
+      SET refresh_token = '${refreshToken}'
+      WHERE username = '${username}'
+      RETURNING user_id, username;
+    `;
+    return await dbService.query(sql);
+  };
+
   delete = async (username) => {
     const sql = `
         DELETE FROM users 

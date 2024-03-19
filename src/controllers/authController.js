@@ -21,10 +21,11 @@ export const login = async (req, res) => {
       const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '4h',
       });
+      const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+      userModel.updateRefreshToken(user.username, hashedRefreshToken);
       res
         .status(200)
         .json({ accessToken: accessToken, refreshToken: refreshToken });
-      // store the refresh token in the database for that user
     } else {
       res.status(401).json({ message: 'username and password does not match' });
     }
