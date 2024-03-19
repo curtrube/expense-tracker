@@ -40,10 +40,12 @@ export const login = async (req, res) => {
 export const refresh = async (req, res) => {
   const { username, refreshToken } = req.body;
 
-  if (username === null || username === undefined) {
-    res.sendStatus(400);
-  }
-  if (refreshToken === null || refreshToken === undefined) {
+  if (
+    username === null ||
+    username === undefined ||
+    refreshToken === null ||
+    refreshToken === undefined
+  ) {
     res.sendStatus(400);
   }
   const userModel = new UserModel();
@@ -65,11 +67,30 @@ export const refresh = async (req, res) => {
   }
 };
 
-// TODO: Create a logout function
-// app.delete('/logout')
-// send the refresh token in the request body
-// delete the refresh token from the database
+export const logout = async (req, res) => {
+  const { username, refreshToken } = req.body;
 
-// export const logout = async () => {
-//   const { refreshToken } = req.body;
-// };
+  if (
+    username === null ||
+    username === undefined ||
+    refreshToken === null ||
+    refreshToken === undefined
+  ) {
+    res.sendStatus(400);
+  }
+
+  const userModel = new UserModel();
+  const user = await userModel.find(username);
+  const { refresh_token } = user;
+
+  if (refresh_token === null || refresh_token === undefined) {
+    res.status(401).json({ message: 'you need to login first' });
+  } else if (refreshToken === refresh_token) {
+    jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET, (err) => {
+      if (err) res.sendStatus(403);
+    });
+    if (await userModel.deleteRefreshToken(username)) {
+      res.sendStatus(204);
+    }
+  }
+};

@@ -36,6 +36,15 @@ class UserModel {
     return await dbService.query(sql);
   };
 
+  deleteRefreshToken = async (username) => {
+    const sql = `
+      UPDATE users 
+      SET refresh_token = NULL 
+      WHERE username = '${username}'
+    `;
+    return await dbService.query(sql);
+  };
+
   delete = async (username) => {
     const sql = `
       DELETE FROM users 

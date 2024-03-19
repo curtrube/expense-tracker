@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { corsOptions } from './configs/corsOptions.js';
 import { logger } from './middleware/logEvents.js';
+import authRouter from './routes/auth.js';
 import accountsRouter from './routes/accounts.js';
 import categoriesRouter from './routes/categories.js';
 import transactionsRouter from './routes/transactions.js';
@@ -36,10 +37,6 @@ const posts = [
   },
 ];
 
-import { login, refresh } from './controllers/authController.js';
-app.post('/login', login);
-app.put('/refresh', refresh);
-
 app.get('/posts', authenticateToken, (req, res) => {
   console.log(req);
   res
@@ -61,6 +58,7 @@ function authenticateToken(req, res, next) {
 }
 
 // api routes
+app.use(authRouter);
 app.use(accountsRouter);
 app.use(categoriesRouter);
 app.use(transactionsRouter);

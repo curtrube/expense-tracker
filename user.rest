@@ -35,7 +35,7 @@ content-type: application/json
 }
 
 ### Refresh
-PUT http://localhost:3000/refresh
+POST http://localhost:3000/refresh
 Content-Type: application/json
 
 {   
@@ -47,3 +47,13 @@ Content-Type: application/json
 GET http://localhost:3000/posts
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTdhMmM2ZmYtYmJmNC00NzkxLWI1ZjAtMmI4NjNjODRjMzM3IiwidXNlcm5hbWUiOiJjdXJ0aXMiLCJwYXNzd29yZCI6IiQyYiQxMCQ3TVUzOUpwU3dIdlpzZk4uakRsT2FPeUk2Um9tYVpGWmhnT0RYTkVPSllxNkZzY0VsQkNkRyIsImlhdCI6MTcxMDg3NTg1MywiZXhwIjoxNzEwODc1ODgzfQ.ViQqmZKiWgI-b8gnwI40hkNwKHHtvG-5-RHxtLlKmOQ
+
+
+### Logout
+POST http://localhost:3000/logout
+Content-Type: application/json
+
+{   
+    "username": "curtis",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTdhMmM2ZmYtYmJmNC00NzkxLWI1ZjAtMmI4NjNjODRjMzM3IiwidXNlcm5hbWUiOiJjdXJ0aXMiLCJwYXNzd29yZCI6IiQyYiQxMCQ3TVUzOUpwU3dIdlpzZk4uakRsT2FPeUk2Um9tYVpGWmhnT0RYTkVPSllxNkZzY0VsQkNkRyIsImlhdCI6MTcxMDg3Nzg0MCwiZXhwIjoxNzEwODkyMjQwfQ.NDhMRIilnYXKPjZ07AdhWDW65d1PzCuaCEsIwgcYGiI"
+}
