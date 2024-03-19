@@ -5,27 +5,45 @@ content-type: application/json
     "username": "brian"
 }
 
-###
+### Create user
 
 POST http://localhost:3000/users
 content-type: application/json
 
 {
-    "username": "steveie",
+    "username": "steve",
     "password": "SuperSecret123"
 }
 
+### Update user
 
-###
+POST http://localhost:3000/users
+content-type: application/json
+
+{
+    "username": "curtis",
+    "password": "SuperSecret123"
+}
+
+### Login
 POST http://localhost:3000/login
 content-type: application/json
 
 {
-    "username": "alex",
+    "username": "curtis",
     "password": "SuperSecret123"
 }
 
-###
+### Refresh
+PUT http://localhost:3000/refresh
+Content-Type: application/json
+
+{   
+    "username": "curtis",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTdhMmM2ZmYtYmJmNC00NzkxLWI1ZjAtMmI4NjNjODRjMzM3IiwidXNlcm5hbWUiOiJjdXJ0aXMiLCJwYXNzd29yZCI6IiQyYiQxMCQ3TVUzOUpwU3dIdlpzZk4uakRsT2FPeUk2Um9tYVpGWmhnT0RYTkVPSllxNkZzY0VsQkNkRyIsImlhdCI6MTcxMDg3NTY0NiwiZXhwIjoxNzEwODkwMDQ2fQ.V2MyrblU6JO7Pxu1yw4EYcdkdY2PyUfErk2_zjD8qW4"
+}
+
+### Get posts private url
 GET http://localhost:3000/posts
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNmY1ZWFkZjYtNDYxOC00MDQwLTkwZGQtMDY0NmFkOTZhZjQ4IiwidXNlcm5hbWUiOiJhbGV4IiwicGFzc3dvcmQiOiIkMmIkMTAkQ3lBUFRwMkNJVWp1QzZPQTYuWDFQTzVoeGVieGhibVlNaVdDR0x1STdXdVV3OFBhMFd0aWkiLCJpYXQiOjE3MTA4MTg3OTQsImV4cCI6MTcxMDgxOTA5NH0.AnSVbi9T5wDhHFXzbtBAjRU8hsaVWsUVc9Ksv_LkF3w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTdhMmM2ZmYtYmJmNC00NzkxLWI1ZjAtMmI4NjNjODRjMzM3IiwidXNlcm5hbWUiOiJjdXJ0aXMiLCJwYXNzd29yZCI6IiQyYiQxMCQ3TVUzOUpwU3dIdlpzZk4uakRsT2FPeUk2Um9tYVpGWmhnT0RYTkVPSllxNkZzY0VsQkNkRyIsImlhdCI6MTcxMDg3NTg1MywiZXhwIjoxNzEwODc1ODgzfQ.ViQqmZKiWgI-b8gnwI40hkNwKHHtvG-5-RHxtLlKmOQ

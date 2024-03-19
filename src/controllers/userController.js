@@ -32,6 +32,7 @@ export const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     // const user = { username: username, password: hashedPassword };
     const results = await userModel.create(username, hashedPassword);
+    // TODO: how to handle duplicate unique values
     if (results.length > 0) {
       res.status(201).json({ message: 'successfully created user' });
     } else {
