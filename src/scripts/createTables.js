@@ -1,17 +1,9 @@
 import dbService from '../services/dbService.js';
 
 const createDatabase = async () => {
-  const sql =
-    "SELECT datname FROM pg_database WHERE datname = 'expense_tracker';";
-  const result = await dbService.query(sql);
-  if (result.length === 0) {
-    console.log('database not found');
-    console.log('creating database');
-    await dbService.query('CREATE DATABASE expense_tracker;');
-    console.log('database created');
-  } else {
-    console.log('database already exists');
-  }
+  const sql = 'CREATE DATABASE expense_tracker;';
+  // TODO: dbService assumes expense_tracker exists
+  console.log(await dbService.query(sql));
 };
 
 const createCategoryTable = async () => {
@@ -22,8 +14,8 @@ const createCategoryTable = async () => {
           CONSTRAINT categories_pkey PRIMARY KEY (category_id)
       );
   `;
-  const result = await dbService.query(sql);
-  console.log(result);
+  console.log('creating categories table');
+  console.log(await dbService.query(sql));
 };
 
 const createAccountsTable = async () => {
@@ -36,8 +28,8 @@ const createAccountsTable = async () => {
         CONSTRAINT accounts_pkey PRIMARY KEY (account_id)
       );
   `;
-  const result = dbService.query(sql);
-  console.log(result);
+  console.log('creating accounts table');
+  console.log(await dbService.query(sql));
 };
 
 const createTransactionsTable = async () => {
@@ -60,8 +52,8 @@ const createTransactionsTable = async () => {
             ON DELETE NO ACTION
       );
   `;
-  const result = await dbService.query(sql);
-  console.log(result);
+  console.log('creating transactions table');
+  console.log(await dbService.query(sql));
 };
 
 const createUsersTable = async () => {
@@ -74,12 +66,12 @@ const createUsersTable = async () => {
       CONSTRAINT users_pkey PRIMARY KEY (user_id)
     );
   `;
-  const result = await dbService.query(sql);
-  console.log(result);
+  console.log('creating users table');
+  console.log(await dbService.query(sql));
 };
 
 // await createDatabase();
-// await createCategoryTable();
-// await createAccountsTable();
-// await createTransactionsTable();
+await createCategoryTable();
+await createAccountsTable();
+await createTransactionsTable();
 await createUsersTable();
