@@ -1,6 +1,9 @@
 # Class Diagram
 
 ```mermaid
+---
+title: Transaction
+---
 classDiagram
     Transaction <|-- User
     Transaction <|-- Account

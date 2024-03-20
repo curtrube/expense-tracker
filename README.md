@@ -40,14 +40,3 @@ Delete
 ```bash
 curl -X DELETE http://127.0.0.1:3000/categories/<id>
 ```
-
-## Expense Tracker
-
-```mermaid
----
-title: Transaction
----
-erDiagram
-    Transaction }o--o| Category : contains
-    Transaction |o--o| Account : contains
-```
