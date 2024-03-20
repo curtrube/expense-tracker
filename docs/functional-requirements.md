@@ -3,11 +3,12 @@
 ## API
 
 - Must serve traffic/requests securely i.e. HTTPS
-- Must log user activity i.e. logins, server, database
+- Must be stateless
 
 ## Logs
 
 - Must be stored in an external service
+- Must log user activity i.e. logins, server requests, database
 
 ## User
 
