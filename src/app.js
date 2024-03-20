@@ -23,9 +23,6 @@ app.use(cors(corsOptions));
 // built-in middleware for json
 app.use(express.json());
 
-// serve static files
-app.use('/', express.static('public'));
-
 const posts = [
   {
     user: 'curtis',
