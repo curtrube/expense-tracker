@@ -39,6 +39,7 @@ const createTransactionsTable = async () => {
           merchant text COLLATE pg_catalog."default" NOT NULL,
           amount double precision NOT NULL,
           date date NOT NULL,
+          user_id uuid NOT NULL,
           account_id integer NOT NULL,
           category_id integer NOT NULL,
         CONSTRAINT transactions_pkey PRIMARY KEY (transaction_id),
@@ -48,6 +49,10 @@ const createTransactionsTable = async () => {
             ON DELETE NO ACTION,
         CONSTRAINT category_id FOREIGN KEY (category_id)
             REFERENCES public.categories (category_id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION,
+        CONSTRAINT user_id FOREIGN KEY (user_id)
+            REFERENCES public.users (user_id) MATCH SIMPLE
             ON UPDATE NO ACTION
             ON DELETE NO ACTION
       );

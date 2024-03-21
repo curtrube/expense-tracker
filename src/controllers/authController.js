@@ -18,7 +18,7 @@ export const login = async (req, res) => {
       // token payload was getting concatenated so I'm removing from the user object.
       delete user.refresh_token;
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '30s',
+        expiresIn: '15m',
       });
       const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '4h',
@@ -60,7 +60,7 @@ export const refresh = async (req, res) => {
       // TODO: same as above, what's a better way to handle this?
       delete user.refresh_token;
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '30s',
+        expiresIn: '15m',
       });
       res.status(201).json({ accessToken: accessToken });
     });

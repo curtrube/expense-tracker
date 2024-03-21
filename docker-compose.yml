@@ -19,10 +19,10 @@ services:
       PGADMIN_DEFAULT_PASSWORD: SuperSecret
     volumes:
       - $PWD/db/pgadmin:/var/lib/pgadmin
-  expense-tracker:
-    image: expense-tracker:v1
-    container_name: expense-tracker
-    ports:
-      - '8080:80'
-    environment:
-      PGHOST: postgres
+  # expense-tracker:
+  #   image: expense-tracker:v1
+  #   container_name: expense-tracker
+  #   ports:
+  #     - '8080:80'
+  #   environment:
+  #     PGHOST: postgres
