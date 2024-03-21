@@ -13,6 +13,7 @@ export const getTransactions = async (req, res) => {
     console.error(error);
   }
 };
+
 export const getTransaction = async (req, res) => {
   const { id } = req.params;
   const transactionModel = new TransactionModel();
@@ -27,14 +28,16 @@ export const getTransaction = async (req, res) => {
     console.error(error);
   }
 };
+
 export const createTransaction = async (req, res) => {
-  const { merchant, amount, date, accountId, categoryId } = req.body;
+  const { merchant, amount, date, userId, accountId, categoryId } = req.body;
   const transactionModel = new TransactionModel();
   try {
     const results = await transactionModel.create(
       merchant,
       amount,
       date,
+      userId,
       accountId,
       categoryId
     );
@@ -45,9 +48,10 @@ export const createTransaction = async (req, res) => {
     console.error(error);
   }
 };
+
 export const updateTransaction = async (req, res) => {
   const { id } = req.params;
-  const { merchant, amount, date, accountId, categoryId } = req.body;
+  const { merchant, amount, date, userId, accountId, categoryId } = req.body;
   const transactionModel = new TransactionModel();
   try {
     const results = await transactionModel.update(
@@ -55,6 +59,7 @@ export const updateTransaction = async (req, res) => {
       merchant,
       amount,
       date,
+      userId,
       accountId,
       categoryId
     );
@@ -67,6 +72,7 @@ export const updateTransaction = async (req, res) => {
     console.error(error);
   }
 };
+
 export const deleteTransaction = async (req, res) => {
   const { id } = req.params;
   const transactionModel = new TransactionModel();

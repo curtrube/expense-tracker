@@ -5,6 +5,10 @@
 - Must serve traffic/requests securely i.e. HTTPS
 - Must be stateless
 
+## Database
+
+- Must use least privilege access user
+
 ## Logs
 
 - Must be stored in an external service
