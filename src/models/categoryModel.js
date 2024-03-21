@@ -8,28 +8,30 @@ class CategoryModel {
 
   findOne = async (categoryId) => {
     const sql = `
-      SELECT * 
+      SELECT *
       FROM categories 
       WHERE category_id = ${categoryId};
     `;
     return await dbService.query(sql);
   };
 
-  create = async (categoryName) => {
+  create = async (name, description) => {
     const sql = `
-      INSERT INTO categories(name)
-      VALUES('${categoryName}')
+      INSERT INTO categories(name, description)
+      VALUES('${name}', '${description}')
       RETURNING category_id, name;
     `;
     return await dbService.query(sql);
   };
 
-  update = async (categoryId, categoryName) => {
+  update = async (categoryId, name, description) => {
     const sql = `
       UPDATE categories
-      SET name = '${categoryName}'
+      SET
+        name = '${name}',
+        description = '${description}'
       WHERE category_id = '${categoryId}'
-      RETURNING category_id, name;
+      RETURNING category_id, name, description;
     `;
     return await dbService.query(sql);
   };

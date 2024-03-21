@@ -30,10 +30,10 @@ export const getCategory = async (req, res) => {
 export const createCategory = async (req, res) => {
   // TODO: input needs to be sanitized
   // TODO: should we allow duplicate names? probably not
-  const { name } = req.body;
+  const { name, description } = req.body;
   const categoryModel = new CategoryModel();
   try {
-    const results = await categoryModel.create(name);
+    const results = await categoryModel.create(name, description);
     if (results.length !== 0) {
       res.status(201).json({ categories: results });
     }
@@ -44,10 +44,11 @@ export const createCategory = async (req, res) => {
 
 export const updateCategory = async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, description } = req.body;
   const categoryModel = new CategoryModel();
   try {
-    const results = await categoryModel.update(id, name);
+    const results = await categoryModel.update(id, name, description);
+    console.log(results);
     if (results.length !== 0) {
       res.status(201).json({ categories: results });
     }
