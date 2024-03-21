@@ -2,11 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import { corsOptions } from './configs/corsOptions.js';
 import { logger } from './middleware/logEvents.js';
+// TODO consolidate all these route imports
 import authRouter from './routes/auth.js';
 import accountsRouter from './routes/accounts.js';
 import categoriesRouter from './routes/categories.js';
 import transactionsRouter from './routes/transactions.js';
 import usersRouter from './routes/users.js';
+import healthRouter from './routes/health.js';
 import errorRouter from './routes/error.js';
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
@@ -60,6 +62,7 @@ app.use(accountsRouter);
 app.use(categoriesRouter);
 app.use(transactionsRouter);
 app.use(usersRouter);
+app.use(healthRouter);
 app.use(errorRouter);
 
 app.listen(port, () => {
