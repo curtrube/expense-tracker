@@ -19,7 +19,7 @@ class CategoryModel {
     const sql = `
       INSERT INTO categories(name, description)
       VALUES('${name}', '${description}')
-      RETURNING category_id, name;
+      RETURNING category_id, name, description;
     `;
     return await dbService.query(sql);
   };
