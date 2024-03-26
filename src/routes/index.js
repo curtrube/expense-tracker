@@ -7,15 +7,16 @@ import accountsRouter from './accounts.js';
 import categoriesRouter from './categories.js';
 import transactionsRouter from './transactions.js';
 import errorRouter from './error.js';
+import { authenticateToken } from '../middleware/authToken.js';
 
 const router = Router();
 
-router.use('/', healthRouter);
 router.use('/', authRouter);
-router.use('/', usersRouter);
-router.use('/', categoriesRouter);
-router.use('/', transactionsRouter);
-router.use('/', accountsRouter);
-router.use('/', errorRouter);
+// router.use('/', errorRouter);
+router.use('/', healthRouter);
+router.use('/', authenticateToken, usersRouter);
+router.use('/', authenticateToken, transactionsRouter);
+router.use('/', authenticateToken, categoriesRouter);
+router.use('/', authenticateToken, accountsRouter);
 
 export default router;

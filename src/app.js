@@ -3,7 +3,6 @@ import cors from 'cors';
 import { corsOptions } from './configs/corsOptions.js';
 import { logger } from './middleware/logEvents.js';
 import routes from './routes/index.js';
-import { authenticateToken } from './middleware/authToken.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -48,8 +47,13 @@ app.use(express.json());
 // }
 
 // api routes
-// All api routes should be protected / private
-app.use('/api', authenticateToken, routes);
+app.use('/api', routes);
+
+// Middleware to handle not found routes (404)
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Not found' });
+  next();
+});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
