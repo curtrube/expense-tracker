@@ -1,23 +1,21 @@
-// 'use strict';
+import { Router } from 'express';
 
-// import categories from './categories.js';
-// import accounts from './accounts.js';
-// import transactions from './transactions.js';
-// import notFound from './notFound.js';
+import authRouter from './auth.js';
+import usersRouter from './users.js';
+import healthRouter from './health.js';
+import accountsRouter from './accounts.js';
+import categoriesRouter from './categories.js';
+import transactionsRouter from './transactions.js';
+import errorRouter from './error.js';
 
-// export default {
-//   categories,
-//   accounts,
-//   transactions,
-//   notFound,
-// };
+const router = Router();
 
-// import accountsRouter from './accounts.js';
-// import categoriesRouter from './accounts.js';
-// import transactionsRouter from './transactions.js';
+router.use('/', healthRouter);
+router.use('/', authRouter);
+router.use('/', usersRouter);
+router.use('/', categoriesRouter);
+router.use('/', transactionsRouter);
+router.use('/', accountsRouter);
+router.use('/', errorRouter);
 
-// export default {
-//   accountsRouter,
-//   categoriesRouter,
-//   transactionsRouter,
-// };
+export default router;
