@@ -28,7 +28,11 @@ export const login = async (req, res) => {
       userModel.updateRefreshToken(user.username, refreshToken);
       res
         .status(200)
-        .json({ accessToken: accessToken, refreshToken: refreshToken });
+        .json({
+          user: user.username,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        });
     } else {
       res.status(401).json({ message: 'username and password does not match' });
     }
