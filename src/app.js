@@ -3,9 +3,12 @@ import cors from 'cors';
 import { corsOptions } from './configs/corsOptions.js';
 import { logger } from './middleware/logEvents.js';
 import routes from './routes/index.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cookieParser());
 
 // custom middleware logger
 app.use(logger);
