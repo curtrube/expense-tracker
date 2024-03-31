@@ -26,13 +26,16 @@ export const login = async (req, res) => {
       // TODO: hash the refresh token, but how do we decode?
       // const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
       userModel.updateRefreshToken(user.username, refreshToken);
-      res
-        .status(200)
-        .json({
-          user: user.username,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-        });
+      const options = {
+        maxAge: 1000 * 60 * 15,
+        httpOnly: true,
+        // signed: true,
+      };
+      res.status(200).cookie('accessToken', accessToken, options).json({
+        user: user.username,
+        // accessToken: accessToken, TODO: we don't need to send this because we're sending via cookie above.
+        refreshToken: refreshToken,
+      });
     } else {
       res.status(401).json({ message: 'username and password does not match' });
     }
