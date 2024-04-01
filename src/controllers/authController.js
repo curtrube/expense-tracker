@@ -7,9 +7,11 @@ export const login = async (req, res) => {
 
   const userModel = new UserModel();
   const user = await userModel.find(username);
+  console.log(user);
 
   if (user === null || user === undefined) {
-    res.status(500).json({ message: 'user not found' });
+    res.status(500).json({ message: 'no user provided' });
+    return;
   }
 
   try {
@@ -26,15 +28,16 @@ export const login = async (req, res) => {
       // TODO: hash the refresh token, but how do we decode?
       // const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
       userModel.updateRefreshToken(user.username, refreshToken);
-      const options = {
+
+      const cookieOptions = {
         maxAge: 1000 * 60 * 15,
         httpOnly: true,
-        // signed: true,
+        secure: true,
+        sameSite: 'strict',
       };
-      res.status(200).cookie('accessToken', accessToken, options).json({
+      res.status(200).cookie('refreshToken', refreshToken, cookieOptions).json({
         user: user.username,
-        // accessToken: accessToken, TODO: we don't need to send this because we're sending via cookie above.
-        refreshToken: refreshToken,
+        accessToken: accessToken,
       });
     } else {
       res.status(401).json({ message: 'username and password does not match' });
