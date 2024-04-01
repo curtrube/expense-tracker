@@ -64,7 +64,7 @@ const createTransactionsTable = async () => {
 
 const createUsersTable = async () => {
   const sql = `
-    CREATE Table public.users(
+    CREATE TABLE IF NOT EXISTS public.users (
         user_id uuid DEFAULT gen_random_uuid() not null UNIQUE, 
         username text not null UNIQUE, 
         password text not null, 
@@ -77,7 +77,7 @@ const createUsersTable = async () => {
 };
 
 // await createDatabase();
-await createCategoryTable();
-await createAccountsTable();
-await createTransactionsTable();
-await createUsersTable();
+// await createCategoryTable();
+// await createAccountsTable();
+// await createUsersTable();
+// await createTransactionsTable();
