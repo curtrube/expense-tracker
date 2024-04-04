@@ -7,7 +7,6 @@ export const login = async (req, res) => {
 
   const userModel = new UserModel();
   const user = await userModel.find(username);
-  console.log(user);
 
   if (user === null || user === undefined) {
     res.status(500).json({ message: 'no user provided' });
@@ -20,25 +19,28 @@ export const login = async (req, res) => {
       // token payload was getting concatenated so I'm removing from the user object.
       delete user.refresh_token;
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '15m',
+        expiresIn: '5m',
       });
       const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: '4h',
+        expiresIn: '1h',
       });
       // TODO: hash the refresh token, but how do we decode?
       // const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
       userModel.updateRefreshToken(user.username, refreshToken);
 
-      const cookieOptions = {
-        maxAge: 1000 * 60 * 15,
+      const refreshOptions = {
+        maxAge: 1000 * 60 * 60,
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
       };
-      res.status(200).cookie('refreshToken', refreshToken, cookieOptions).json({
-        user: user.username,
-        accessToken: accessToken,
-      });
+      res
+        .status(200)
+        .cookie('refreshToken', refreshToken, refreshOptions)
+        .json({
+          user: user.username,
+          accessToken: accessToken,
+        });
     } else {
       res.status(401).json({ message: 'username and password does not match' });
     }
