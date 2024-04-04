@@ -6,6 +6,7 @@ class UserModel {
     return await dbService.query(sql);
   };
 
+  // Change to findOne()?
   find = async (username) => {
     const sql = `
       SELECT user_id, username, password, refresh_token 
@@ -23,6 +24,15 @@ class UserModel {
       INSERT INTO users(username, password)
       VALUES('${username}', '${password}')
       RETURNING username;`;
+    return await dbService.query(sql);
+  };
+
+  findRefreshToken = async (refreshToken) => {
+    const sql = `
+      SELECT user_id, username, refresh_token 
+      FROM users
+      WHERE refresh_token = '${refreshToken}';
+    `;
     return await dbService.query(sql);
   };
 
