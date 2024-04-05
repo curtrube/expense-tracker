@@ -6,16 +6,17 @@ class UserModel {
     return await dbService.query(sql);
   };
 
-  // Change to findOne()?
-  find = async (username) => {
+  findOne = async (username) => {
     const sql = `
-      SELECT user_id, username, password, refresh_token 
+      SELECT user_id, username, password
       FROM users 
       WHERE username = '${username}';
     `;
     const rows = await dbService.query(sql);
-    if (rows.length > 0) {
-      return rows[0];
+    if (rows != undefined) {
+      if (rows.length > 0) {
+        return rows[0];
+      }
     }
   };
 
@@ -23,34 +24,7 @@ class UserModel {
     const sql = `
       INSERT INTO users(username, password)
       VALUES('${username}', '${password}')
-      RETURNING username;`;
-    return await dbService.query(sql);
-  };
-
-  findRefreshToken = async (refreshToken) => {
-    const sql = `
-      SELECT user_id, username, refresh_token 
-      FROM users
-      WHERE refresh_token = '${refreshToken}';
-    `;
-    return await dbService.query(sql);
-  };
-
-  updateRefreshToken = async (username, refreshToken) => {
-    const sql = `
-      UPDATE users 
-      SET refresh_token = '${refreshToken}'
-      WHERE username = '${username}'
-      RETURNING user_id, username;
-    `;
-    return await dbService.query(sql);
-  };
-
-  deleteRefreshToken = async (username) => {
-    const sql = `
-      UPDATE users 
-      SET refresh_token = NULL 
-      WHERE username = '${username}'
+      RETURNING username;
     `;
     return await dbService.query(sql);
   };

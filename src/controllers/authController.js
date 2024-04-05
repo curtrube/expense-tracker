@@ -1,32 +1,33 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/userModel.js';
+import RefreshTokenModel from '../models/refreshTokenModel.js';
 
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
-  const userModel = new UserModel();
-  const user = await userModel.find(username);
-
-  if (user === null || user === undefined) {
-    res.status(500).json({ message: 'no user provided' });
+  if (username == null || password == null) {
+    res.status(500).json({ message: 'no username or password provided' });
     return;
   }
 
+  const userModel = new UserModel();
+  const user = await userModel.findOne(username);
+  if (!user) {
+    return res.status(404).json({ message: 'no user found in db' });
+  }
+
+  const refreshTokenModel = new RefreshTokenModel();
+
   try {
     if (await bcrypt.compare(password, user.password)) {
-      // TODO: bug I was running into when generating a new token
-      // token payload was getting concatenated so I'm removing from the user object.
-      delete user.refresh_token;
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '5m',
       });
       const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '1h',
       });
-      // TODO: hash the refresh token, but how do we decode?
-      // const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-      userModel.updateRefreshToken(user.username, refreshToken);
+      refreshTokenModel.create(user.user_id, refreshToken);
 
       const refreshOptions = {
         maxAge: 1000 * 60 * 60,
@@ -38,7 +39,7 @@ export const login = async (req, res) => {
         .status(200)
         .cookie('refreshToken', refreshToken, refreshOptions)
         .json({
-          user: user.username,
+          username: user.username,
           accessToken: accessToken,
         });
     } else {
