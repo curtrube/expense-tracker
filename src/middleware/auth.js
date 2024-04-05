@@ -1,11 +1,13 @@
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import UserModel from '../models/userModel.js';
+import RefreshTokenModel from '../models/refreshTokenModel.js';
 
 dotenv.config();
 
 export const authenticate = async (req, res, next) => {
   const userModel = new UserModel();
+  const refreshTokenModel = new RefreshTokenModel();
   let verifiedRefreshToken;
   let verifiedAccessToken;
 
@@ -14,8 +16,7 @@ export const authenticate = async (req, res, next) => {
   // Check the refresh token is saved in the DB
   if (req.cookies && req.cookies.refreshToken) {
     try {
-      // TODO: move this to it's own model
-      const savedRefreshToken = await userModel.findRefreshToken(refreshToken);
+      const savedRefreshToken = await refreshTokenModel.findOne(refreshToken);
       if (!savedRefreshToken) {
         res.status(401).json({ message: 'no refresh token found in db' });
       }
@@ -66,7 +67,7 @@ export const authenticate = async (req, res, next) => {
   // Compare the two profiles
   let refreshTokenUser;
   try {
-    refreshTokenUser = await userModel.find(verifiedRefreshToken.username);
+    refreshTokenUser = await userModel.findOne(verifiedRefreshToken.username);
   } catch (err) {
     return res
       .status(500)
@@ -81,7 +82,7 @@ export const authenticate = async (req, res, next) => {
 
   let accessTokenUser;
   try {
-    accessTokenUser = await userModel.find(verifiedAccessToken.username);
+    accessTokenUser = await userModel.findOne(verifiedAccessToken.username);
   } catch (err) {
     return res
       .status(500)
@@ -105,5 +106,5 @@ export const authenticate = async (req, res, next) => {
 
   return res
     .status(401)
-    .json({ message: "refresh token user and access token user don't match" });
+    .json({ message: 'refresh token user and access token user do not match' });
 };
