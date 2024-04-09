@@ -2,6 +2,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/userModel.js';
 import RefreshTokenModel from '../models/refreshTokenModel.js';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from '../utilities/generateToken.js';
 
 export const login = async (req, res) => {
   const { username, password } = req.body;
@@ -21,12 +25,9 @@ export const login = async (req, res) => {
 
   try {
     if (await bcrypt.compare(password, user.password)) {
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '5m',
-      });
-      const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: '1h',
-      });
+      const accessToken = generateAccessToken(user);
+      const refreshToken = generateRefreshToken(user);
+
       refreshTokenModel.create(user.user_id, refreshToken);
 
       const refreshOptions = {
@@ -47,36 +48,6 @@ export const login = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-  }
-};
-
-export const refresh = async (req, res) => {
-  const { username, refreshToken } = req.body;
-
-  if (
-    username === null ||
-    username === undefined ||
-    refreshToken === null ||
-    refreshToken === undefined
-  ) {
-    res.sendStatus(400);
-  }
-  const userModel = new UserModel();
-  const user = await userModel.find(username);
-  const { refresh_token } = user;
-
-  if (refresh_token === null || refresh_token === undefined) {
-    res.status(401).json({ message: 'you need to login' });
-  } else if (refreshToken === refresh_token) {
-    jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET, (err) => {
-      if (err) res.sendStatus(403);
-      // TODO: same as above, what's a better way to handle this?
-      delete user.refresh_token;
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '15m',
-      });
-      res.status(201).json({ accessToken: accessToken });
-    });
   }
 };
 
@@ -106,4 +77,50 @@ export const logout = async (req, res) => {
       res.sendStatus(204);
     }
   }
+};
+
+export const refreshToken = async (req, res) => {
+  if (req.cookies && req.cookies.refreshToken) {
+    const refreshTokenModel = new RefreshTokenModel();
+    let savedRefreshToken;
+    try {
+      savedRefreshToken = await refreshTokenModel.findOne(
+        req.cookies.refreshToken
+      );
+    } catch (err) {
+      return res.status(500).json({
+        message: err.message,
+        location: 'await refreshTokenModel.findOne',
+      });
+    }
+    if (!savedRefreshToken) {
+      res.status(401).json({ message: 'no refresh token found in the db' });
+    }
+
+    // If saved, send back a new access token
+    let verifiedRefreshToken;
+    try {
+      verifiedRefreshToken = jwt.verify(
+        req.cookies.refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      );
+    } catch (err) {
+      return res.status(500).json({
+        message: err.message,
+        location: 'jwt.verify failed refresh token',
+      });
+    }
+
+    try {
+      const userModel = new UserModel();
+      const user = await userModel.findOne(verifiedRefreshToken.username);
+      const accessToken = generateAccessToken(user);
+      return res.status(200).json({ accessToken });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ message: err.message, location: 'await userModel.findOne' });
+    }
+  }
+  return res.status(401).json({ message: 'no refresh token in cookies' });
 };
