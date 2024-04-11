@@ -79,7 +79,7 @@ export const logout = async (req, res) => {
   }
 };
 
-export const refreshToken = async (req, res) => {
+export const refresh = async (req, res) => {
   if (req.cookies && req.cookies.refreshToken) {
     const refreshTokenModel = new RefreshTokenModel();
     let savedRefreshToken;
