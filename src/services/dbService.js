@@ -15,8 +15,9 @@ class DBService {
     const client = await this.dbInstance.connect();
     try {
       const result = await client.query(query);
-      // TODO: add some error checking?
-      return result.rows;
+      if (result.rows && result.rows.length > 0) {
+        return result.rows;
+      }
     } catch (err) {
       console.error(err);
     } finally {

@@ -7,35 +7,36 @@ class UserModel {
   };
 
   findOne = async (username) => {
-    const sql = `
-      SELECT user_id, username, password
-      FROM users 
-      WHERE username = '${username}';
-    `;
-    const rows = await dbService.query(sql);
-    if (rows != undefined) {
-      if (rows.length > 0) {
-        return rows[0];
-      }
+    const query = {
+      text: 'SELECT user_id, username, password FROM users WHERE username = $1;',
+      values: [username],
+    };
+    const rows = await dbService.query(query);
+    if (rows && rows.length > 0) {
+      return rows[0];
     }
   };
 
   create = async (username, password) => {
-    const sql = `
-      INSERT INTO users(username, password)
-      VALUES('${username}', '${password}')
-      RETURNING username;
-    `;
-    return await dbService.query(sql);
+    const query = {
+      text: 'INSERT INTO users(username, password) VALUES($1, $2) RETURNING user_id, username;',
+      values: [username, password],
+    };
+    const rows = await dbService.query(query);
+    if (rows && rows.length > 0) {
+      return rows[0];
+    }
   };
 
   delete = async (username) => {
-    const sql = `
-      DELETE FROM users 
-      WHERE username = ${username} 
-      RETURNING username;
-    `;
-    return await dbService.query(sql);
+    const query = {
+      text: 'DELETE FROM users WHERE username = $1 RETURNING user_id, username;',
+      values: [username],
+    };
+    const rows = await dbService.query(query);
+    if (rows && rows.length > 0) {
+      return rows[0];
+    }
   };
 }
 
