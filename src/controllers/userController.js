@@ -27,7 +27,9 @@ export const getUser = async (req, res) => {
       throw err;
     }
   } else {
-    return res.status(400).json({ message: 'missing username in req.body' });
+    return res
+      .status(400)
+      .json({ message: 'missing username in query params' });
   }
 };
 
