@@ -38,13 +38,14 @@ class CategoryModel {
         UPDATE categories
         SET
           name = $1,
-          description = $2, 
+          description = $2 
         WHERE category_id = $3 
         RETURNING category_id, name, description;
       `,
       values: [name, description, categoryId],
     };
     const rows = await dbService.query(query);
+    console.log(rows);
     if (rows && rows.length === 1) {
       return rows[0];
     }

@@ -20,7 +20,7 @@ export const getCategory = async (req, res) => {
   try {
     const results = await categoryModel.findOne(id);
     if (results.length !== 0) {
-      res.status(200).json({ categories: results });
+      res.status(200).json({ categories: [results] });
     }
   } catch (error) {
     console.error(error);

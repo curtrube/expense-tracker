@@ -70,6 +70,7 @@ export const createUser = async (req, res) => {
   }
 };
 
+// Delete user violates foreign key constraint on Transactions table.
 export const deleteUser = async (req, res) => {
   if (req.body && req.body.username) {
     const { username } = req.body;

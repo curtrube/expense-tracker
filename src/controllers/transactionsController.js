@@ -3,9 +3,9 @@ import TransactionModel from '../models/transactionModel.js';
 export const getTransactions = async (req, res) => {
   const transactionModel = new TransactionModel();
   try {
-    const results = await transactionModel.findAll();
-    if (results.length !== 0) {
-      res.status(200).json({ transactions: results });
+    const transactions = await transactionModel.findAll();
+    if (transactions) {
+      res.status(200).json({ transactions: transactions });
     } else {
       res.status(204).json({ transactions: [] });
     }
@@ -18,9 +18,9 @@ export const getTransaction = async (req, res) => {
   const { id } = req.params;
   const transactionModel = new TransactionModel();
   try {
-    const results = await transactionModel.findOne(id);
-    if (results.length !== 0) {
-      res.status(200).json({ transactions: results });
+    const transaction = await transactionModel.findOne(id);
+    if (transaction) {
+      res.status(200).json({ transactions: [transaction] });
     } else {
       res.status(204).json({ transactions: [] });
     }
@@ -33,7 +33,7 @@ export const createTransaction = async (req, res) => {
   const { merchant, amount, date, userId, accountId, categoryId } = req.body;
   const transactionModel = new TransactionModel();
   try {
-    const results = await transactionModel.create(
+    const transaction = await transactionModel.create(
       merchant,
       amount,
       date,
@@ -41,8 +41,8 @@ export const createTransaction = async (req, res) => {
       accountId,
       categoryId
     );
-    if (results.length !== 0) {
-      res.status(201).json({ transactions: results });
+    if (transaction) {
+      res.status(201).json({ transactions: [transaction] });
     }
   } catch (error) {
     console.error(error);
@@ -54,7 +54,7 @@ export const updateTransaction = async (req, res) => {
   const { merchant, amount, date, userId, accountId, categoryId } = req.body;
   const transactionModel = new TransactionModel();
   try {
-    const results = await transactionModel.update(
+    const transaction = await transactionModel.update(
       id,
       merchant,
       amount,
@@ -63,8 +63,8 @@ export const updateTransaction = async (req, res) => {
       accountId,
       categoryId
     );
-    if (results.length !== 0) {
-      res.status(201).json({ transactions: results });
+    if (transaction) {
+      res.status(201).json({ transactions: [transaction] });
     } else {
       res.json({ transactions: [] });
     }
@@ -77,9 +77,9 @@ export const deleteTransaction = async (req, res) => {
   const { id } = req.params;
   const transactionModel = new TransactionModel();
   try {
-    const results = await transactionModel.delete(id);
-    if (results.lenght !== 0) {
-      res.status(202).json({ transactions: results });
+    const transaction = await transactionModel.delete(id);
+    if (transaction) {
+      res.status(202).json({ transactions: [transaction] });
     }
   } catch (error) {
     console.error(error);
