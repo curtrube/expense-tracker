@@ -115,7 +115,9 @@ export const refresh = async (req, res) => {
       const userModel = new UserModel();
       const user = await userModel.findOne(verifiedRefreshToken.username);
       const accessToken = generateAccessToken(user);
-      return res.status(200).json({ accessToken });
+      return res
+        .status(200)
+        .json({ username: user.username, accessToken: accessToken });
     } catch (err) {
       return res
         .status(500)
