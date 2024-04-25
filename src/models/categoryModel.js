@@ -56,7 +56,7 @@ class CategoryModel {
       text: `
         DELETE FROM categories
         WHERE category_id = $1 
-        RETURNING category_id, name;
+        RETURNING category_id, name, description;
       `,
       values: [categoryId],
     };

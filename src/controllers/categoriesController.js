@@ -20,7 +20,7 @@ export const getCategory = async (req, res) => {
   try {
     const results = await categoryModel.findOne(id);
     if (results.length !== 0) {
-      res.status(200).json({ categories: [results] });
+      res.status(200).json(results);
     }
   } catch (error) {
     console.error(error);
@@ -35,7 +35,7 @@ export const createCategory = async (req, res) => {
   try {
     const results = await categoryModel.create(name, description);
     if (results.length !== 0) {
-      res.status(201).json({ categories: results });
+      res.status(201).json(results);
     }
   } catch (error) {
     console.error(error);
@@ -50,7 +50,7 @@ export const updateCategory = async (req, res) => {
     const results = await categoryModel.update(id, name, description);
     console.log(results);
     if (results.length !== 0) {
-      res.status(201).json({ categories: results });
+      res.status(201).json(results);
     }
   } catch (error) {
     console.error(error);
@@ -63,7 +63,7 @@ export const deleteCategory = async (req, res) => {
   try {
     const results = await categoryModel.delete(id);
     if (results.length !== 0) {
-      res.status(202).json({ categories: results });
+      res.status(202).json(results);
     }
   } catch (error) {
     console.error(error);
