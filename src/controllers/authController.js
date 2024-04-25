@@ -6,6 +6,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from '../utilities/generateToken.js';
+import parseDuration from '../utilities/parseDuration.js';
 
 export const login = async (req, res) => {
   const { username, password } = req.body;
@@ -31,7 +32,7 @@ export const login = async (req, res) => {
       refreshTokenModel.create(user.user_id, refreshToken);
 
       const refreshOptions = {
-        maxAge: 1000 * 60 * 60,
+        maxAge: parseDuration(process.env.REFRESH_TOKEN_EXPIRY),
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
@@ -52,30 +53,54 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  const { username, refreshToken } = req.body;
+  const refreshToken = req.cookies?.refreshToken;
 
-  if (
-    username === null ||
-    username === undefined ||
-    refreshToken === null ||
-    refreshToken === undefined
-  ) {
-    res.sendStatus(400);
+  let savedRefreshToken;
+  if (refreshToken) {
+    const refreshTokenModel = new RefreshTokenModel();
+    try {
+      savedRefreshToken = await refreshTokenModel.findOne(refreshToken);
+      if (!savedRefreshToken) {
+        return res
+          .status(400)
+          .json({ message: 'no refresh token found in db' });
+      }
+    } catch (err) {
+      return res.status(500).json({
+        message: err.message,
+        location: 'refreshTokenModel.findOne in authController logout',
+      });
+    }
+  } else {
+    return res
+      .status(400)
+      .json({ message: 'no refresh token found in cookies' });
   }
 
-  const userModel = new UserModel();
-  const user = await userModel.find(username);
-  const { refresh_token } = user;
-
-  if (refresh_token === null || refresh_token === undefined) {
-    res.status(401).json({ message: 'you need to login first' });
-  } else if (refreshToken === refresh_token) {
-    jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET, (err) => {
-      if (err) res.sendStatus(403);
-    });
-    if (await userModel.deleteRefreshToken(username)) {
-      res.sendStatus(204);
+  let verifiedRefreshToken;
+  try {
+    verifiedRefreshToken = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+    if (!verifiedRefreshToken) {
+      return res.status(400).json({ message: 'invalid refresh token' });
     }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+
+  const refreshTokenModel = new RefreshTokenModel();
+  try {
+    const userId = verifiedRefreshToken?.user_id;
+    const deletedRefreshToken = await refreshTokenModel.delete(userId);
+    if (deletedRefreshToken) {
+      res.clearCookie('refreshToken').status(200).json('log out successful');
+    }
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: 'error deleting refresh token from db' });
   }
 };
 
