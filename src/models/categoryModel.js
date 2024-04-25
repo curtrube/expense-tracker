@@ -45,7 +45,6 @@ class CategoryModel {
       values: [name, description, categoryId],
     };
     const rows = await dbService.query(query);
-    console.log(rows);
     if (rows && rows.length === 1) {
       return rows[0];
     }

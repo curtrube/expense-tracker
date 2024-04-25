@@ -48,7 +48,6 @@ export const updateCategory = async (req, res) => {
   const categoryModel = new CategoryModel();
   try {
     const results = await categoryModel.update(id, name, description);
-    console.log(results);
     if (results.length !== 0) {
       res.status(201).json(results);
     }
