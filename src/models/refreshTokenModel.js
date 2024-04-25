@@ -46,6 +46,21 @@ class RefreshTokenModel {
       return rows[0];
     }
   };
+
+  delete = async (userId) => {
+    const query = {
+      text: `
+        DELETE from refresh_tokens
+        WHERE user_id = $1
+        RETURNING user_id;
+      `,
+      values: [userId],
+    };
+    const rows = await dbService.query(query);
+    if (rows && rows.length === 1) {
+      return rows[0];
+    }
+  };
 }
 
 export default RefreshTokenModel;

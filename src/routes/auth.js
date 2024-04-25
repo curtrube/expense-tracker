@@ -5,7 +5,5 @@ const router = Router();
 router.post('/login', login);
 router.post('/refresh', refresh);
 router.post('/logout', logout);
-// prefix with /auth/login?
-// optional /sign-up route?
 
 export default router;
