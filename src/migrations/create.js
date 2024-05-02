@@ -10,7 +10,7 @@ async function up() {
         password text NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (user_id)
     );
-    `;
+  `;
 
   const refreshTokensTable = `
     CREATE TABLE IF NOT EXISTS public.refresh_tokens (
@@ -23,7 +23,7 @@ async function up() {
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
     );
-    `;
+  `;
 
   const categoriesTable = `
     CREATE TABLE IF NOT EXISTS public.categories (
@@ -37,7 +37,7 @@ async function up() {
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
     );
-    `;
+  `;
 
   const accountsTable = `
     CREATE TABLE IF NOT EXISTS public.accounts (
@@ -52,7 +52,7 @@ async function up() {
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
     );
-    `;
+  `;
 
   const transactionsTable = `
     CREATE TABLE IF NOT EXISTS public.transactions (
@@ -77,23 +77,35 @@ async function up() {
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
     );
-    `;
+  `;
 
-    const tables = [usersTable, refreshTokensTable, categoriesTable, accountsTable, transactionsTable]
+  const tables = [
+    usersTable,
+    refreshTokensTable,
+    categoriesTable,
+    accountsTable,
+    transactionsTable,
+  ];
 
-    for (const table of tables) {
-        console.log(await dbService.query(table))
-    }
+  for (const table of tables) {
+    console.log(await dbService.query(table));
+  }
 }
 
 async function down() {
-    const tables = ['transactions', 'categories', 'accounts', 'refresh_tokens', 'users']
+  const tables = [
+    'transactions',
+    'categories',
+    'accounts',
+    'refresh_tokens',
+    'users',
+  ];
 
-    for (const table of tables) {
-        const sql = `DROP TABLE ${table}`
-        console.log(await dbService.query(sql))
-    }
-} 
+  for (const table of tables) {
+    const sql = `DROP TABLE ${table}`;
+    console.log(await dbService.query(sql));
+  }
+}
 
 await up();
 //await down();
