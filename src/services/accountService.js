@@ -13,9 +13,33 @@ const validateAccountData = (data) => {
   return true;
 };
 
-const getAccounts = async () => {};
+const getAccounts = async (userId) => {
+  if (!userId) {
+    throw new Error('Retrieving accounts missing userId');
+  }
+  const accountModel = new AccountModel();
+  const dbAccounts = await accountModel.findAll(userId);
 
-const getAccount = async () => {};
+  const accounts = dbAccounts.map((account) => {
+    const { account_id, user_id, ...rest } = account;
+    return { userId: user_id, accountId: account_id, ...rest };
+  });
+
+  return accounts;
+};
+
+const getAccount = async (userId, accountId) => {
+  if (!userId || !accountId) {
+    throw new Error('Retrieving account misssing userId or accountId');
+  }
+  const accountModel = new AccountModel();
+  const dbAccount = await accountModel.findOne(userId, accountId);
+
+  const { user_id, account_id, ...rest } = dbAccount;
+  const account = { userId: user_id, accountId: account_id, ...rest };
+
+  return account;
+};
 
 const createAccount = async (accountData) => {
   if (!validateAccountData(accountData)) {
@@ -58,4 +82,4 @@ const updateAccount = async (accountData) => {
 
 const deleteAccount = async () => {};
 
-export default { createAccount };
+export default { getAccounts, getAccount, createAccount, deleteAccount };

@@ -9,7 +9,7 @@ class AccountModel {
     return await dbService.query(query);
   };
 
-  findOne = async (accountId, userId) => {
+  findOne = async (userId, accountId) => {
     const query = {
       text: 'SELECT * FROM accounts WHERE account_id = $1 AND user_ID = $2;',
       values: [accountId, userId],
