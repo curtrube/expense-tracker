@@ -30,54 +30,64 @@ import { mkdir } from 'fs/promises';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const uploadDir = path.join(__dirname, 'public', 'files');
-console.log(uploadDir);
+// const uploadDir = path.join(__dirname, 'public', 'files');
 
-try {
-  if (!fs.existsSync(uploadDir)) {
-    await mkdir(uploadDir);
-  }
-} catch (err) {
-  console.error('Error creating uploadDir:', err);
-}
+// try {
+//   if (!fs.existsSync(uploadDir)) {
+//     await mkdir(uploadDir);
+//   }
+// } catch (err) {
+//   console.error('Error creating uploadDir:', err);
+// }
 
 // Set up multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Appending extension
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, uploadDir);
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + path.extname(file.originalname)); // Appending extension
+//   },
+// });
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
 
-// Define the upload route
-app.post('/upload', upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded.' });
-  }
-  const filePath = req.file.path;
-  const fileName = req.file.filename;
+// // Define the upload route
+// app.post('/upload', upload.single('file'), (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).json({ message: 'No file uploaded.' });
+//   }
+//   const filePath = req.file.path;
+//   const fileName = req.file.filename;
 
-  res.status(201).json({
-    message: 'File uploaded successfully',
-    filePath: filePath,
-    fileName: fileName,
-  });
-});
+//   res.status(201).json({
+//     message: 'File uploaded successfully',
+//     filePath: filePath,
+//     fileName: fileName,
+//   });
+
+//   processFile(`${filePath}`);
+// });
+
+// function processFile(filename) {
+//   try {
+//     const data = fs.readFileSync(filename, 'utf-8');
+//     console.log(data);
+//   } catch (err) {
+//     console.error(`Error reading file: ${filename}`);
+//   }
+// }
 
 // TODO: check if admin user exists
-const req = { body: { username: 'admin', password: 'supersecret' } };
-const res = {
-  status: (statusCode) => ({
-    json: (data) => {
-      console.log(`Status: ${statusCode}, Data:`, data);
-    },
-  }),
-};
-await createUser(req, res);
+// const req = { body: { username: 'admin', password: 'supersecret' } };
+// const res = {
+//   status: (statusCode) => ({
+//     json: (data) => {
+//       console.log(`Status: ${statusCode}, Data:`, data);
+//     },
+//   }),
+// };
+// await createUser(req, res);
 
 // Middleware to handle not found routes (404)
 app.use((req, res, next) => {
