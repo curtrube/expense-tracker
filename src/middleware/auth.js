@@ -101,6 +101,7 @@ export const authenticate = async (req, res, next) => {
   ) {
     res.status(200);
     res.username = accessTokenUser.username;
+    req.user = accessTokenUser;
     return next();
   }
 

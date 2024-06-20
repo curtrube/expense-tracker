@@ -1,4 +1,5 @@
 import AccountModel from '../models/accountModel.js';
+import accountService from '../services/accountService.js';
 
 export const getAccounts = async (req, res) => {
   const accountModel = new AccountModel();
@@ -36,21 +37,14 @@ export const getAccount = async (req, res) => {
 };
 
 export const createAccount = async (req, res) => {
-  if (req.body && req.body.number && req.body.name && req.body.bank) {
-    const { number, name, bank } = req.body;
-    const accountModel = new AccountModel();
-    try {
-      const accounts = await accountModel.create(number, name, bank);
-      if (accounts) {
-        res.status(201).json({ accounts: accounts });
-      }
-    } catch (error) {
-      console.error(error);
+  try {
+    const accountData = { ...req.body, userId: req.user.user_id };
+    const newAccount = await accountService.createAccount(accountData);
+    if (newAccount) {
+      res.status(201).json(newAccount);
     }
-  } else {
-    return res.status(400).json({
-      message: 'error missing account number, name or bank in req.body',
-    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
