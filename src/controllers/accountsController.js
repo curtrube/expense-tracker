@@ -2,37 +2,27 @@ import AccountModel from '../models/accountModel.js';
 import accountService from '../services/accountService.js';
 
 export const getAccounts = async (req, res) => {
-  const accountModel = new AccountModel();
+  const userId = req.user?.user_id;
   try {
-    const accounts = await accountModel.findAll();
+    const accounts = await accountService.getAccounts(userId);
     if (accounts) {
       res.status(200).json({ accounts: accounts });
-    } else {
-      res.status(204).json({ accounts: [] });
     }
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 export const getAccount = async (req, res) => {
-  if (req.params && req.params.id) {
-    const { id } = req.params;
-    const accountModel = new AccountModel();
-    try {
-      const accounts = await accountModel.findOne(id);
-      if (accounts) {
-        res.status(200).json({ accounts: accounts });
-      } else {
-        res.status(204).json({ accounts: [] });
-      }
-    } catch (error) {
-      console.error(error);
+  const userId = req.user?.user_id;
+  const accountId = req.params?.id;
+  try {
+    const account = await accountService.getAccount(userId, accountId);
+    if (account) {
+      res.status(200).json(account);
     }
-  } else {
-    return res
-      .status(400)
-      .json({ message: 'error missing account id in query params' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
