@@ -3,33 +3,53 @@ import accountService from '../services/accountService.js';
 
 export const getAccounts = async (req, res) => {
   const userId = req.user?.user_id;
+  if (!userId) {
+    res.status(400).json({ message: 'userId required' });
+  }
   try {
     const accounts = await accountService.getAccounts(userId);
-    if (accounts) {
+    if (!accounts) {
+      res.status(404).json({ message: 'No accounts found' });
+    } else {
       res.status(200).json({ accounts: accounts });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    if (err.status === 404) {
+      res.status(404).json({ message: 'No accounts found' });
+    } else {
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
 };
 
 export const getAccount = async (req, res) => {
   const userId = req.user?.user_id;
   const accountId = req.params?.id;
+
+  if (!userId || !accountId) {
+    res.status(400).json({ message: 'userId and accountId are required' });
+  }
+
   try {
     const account = await accountService.getAccount(userId, accountId);
-    if (account) {
+    if (!account) {
+      res.status(404).json({ message: 'Account not found' });
+    } else {
       res.status(200).json(account);
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    if (err.status === 404) {
+      res.status(404).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
 };
 
 export const createAccount = async (req, res) => {
+  const accountData = { ...req.body, userId: req.user?.user_id };
+  const newAccount = await accountService.createAccount(accountData);
   try {
-    const accountData = { ...req.body, userId: req.user.user_id };
-    const newAccount = await accountService.createAccount(accountData);
     if (newAccount) {
       res.status(201).json(newAccount);
     }
@@ -39,44 +59,33 @@ export const createAccount = async (req, res) => {
 };
 
 export const updateAccount = async (req, res) => {
-  if (req.params && req.params.id) {
-    const { id } = req.params;
-    const { number, name, bank } = req.body;
-    const accountModel = new AccountModel();
-    try {
-      const accounts = await accountModel.update(id, number, name, bank);
-      if (accounts) {
-        res.status(201).json({ accounts: accounts });
-      } else {
-        res.json({ accounts: [] });
-      }
-    } catch (error) {
-      console.error(error);
+  const accountData = {
+    accountId: req.params?.id,
+    ...req.body,
+    userId: req.user?.user_id,
+  };
+  try {
+    const updatedAccount = await accountService.updateAccount(accountData);
+    if (updatedAccount) {
+      res.status(201).json(updatedAccount);
     }
-  } else {
-    return res
-      .status(400)
-      .json({ message: 'error missing id in request params' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 export const deleteAccount = async (req, res) => {
-  if (req.params && req.params.id) {
-    const { id } = req.params;
-    const accountModel = new AccountModel();
-    try {
-      const accounts = await accountModel.delete(id);
-      if (accounts && accounts.length !== 0) {
-        res.status(202).json({ accounts: accounts });
-      } else {
-        res.json({ accounts: [] });
-      }
-    } catch (error) {
-      console.error(error);
+  const accountId = req.params?.id;
+  const userId = req.user?.user_id;
+  try {
+    const deletedAccount = await accountService.deleteAccount(
+      accountId,
+      userId
+    );
+    if (deletedAccount) {
+      res.status(202).json(deletedAccount);
     }
-  } else {
-    return res
-      .status(400)
-      .json({ message: 'error missing id in request params' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };

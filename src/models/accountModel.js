@@ -1,5 +1,7 @@
 import dbService from '../services/dbService.js';
 
+// TODO: add account type
+
 class AccountModel {
   findAll = async (userId) => {
     const query = {
@@ -49,16 +51,15 @@ class AccountModel {
           number = $1, 
           name = $2,
           institution = $3 
-          user_id = $4
-        WHERE account_id = $5
+        WHERE account_id = $4 and user_id = $5
         RETURNING account_id, number, name, institution, user_id;
       `,
       values: [
         accountNumber,
         accountName,
         accountInstitution,
-        userId,
         accountId,
+        userId,
       ],
     };
     const rows = await dbService.query(query);

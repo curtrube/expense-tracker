@@ -14,31 +14,33 @@ const validateAccountData = (data) => {
 };
 
 const getAccounts = async (userId) => {
-  if (!userId) {
-    throw new Error('Retrieving accounts missing userId');
-  }
   const accountModel = new AccountModel();
   const dbAccounts = await accountModel.findAll(userId);
-
-  const accounts = dbAccounts.map((account) => {
-    const { account_id, user_id, ...rest } = account;
-    return { userId: user_id, accountId: account_id, ...rest };
-  });
-
-  return accounts;
+  if (!dbAccounts) {
+    const error = new Error('No accounts found');
+    error.status(404);
+    throw error;
+  } else {
+    const accounts = dbAccounts.map((account) => {
+      const { account_id, user_id, ...rest } = account;
+      return { accountId: account_id, ...rest, userId: user_id };
+    });
+    return accounts;
+  }
 };
 
 const getAccount = async (userId, accountId) => {
-  if (!userId || !accountId) {
-    throw new Error('Retrieving account misssing userId or accountId');
-  }
   const accountModel = new AccountModel();
   const dbAccount = await accountModel.findOne(userId, accountId);
-
-  const { user_id, account_id, ...rest } = dbAccount;
-  const account = { userId: user_id, accountId: account_id, ...rest };
-
-  return account;
+  if (!dbAccount) {
+    const error = new Error('Account not found');
+    error.status = 404;
+    throw error;
+  } else {
+    const { user_id, account_id, ...rest } = dbAccount;
+    const account = { accountId: account_id, ...rest, userId: user_id };
+    return account;
+  }
 };
 
 const createAccount = async (accountData) => {
@@ -80,6 +82,20 @@ const updateAccount = async (accountData) => {
   return account;
 };
 
-const deleteAccount = async () => {};
+const deleteAccount = async (accountId, userId) => {
+  if (!accountId || !userId) {
+    throw new Error('deleteAccount() missing required parameters');
+  }
+  const accountModel = new AccountModel();
+  const deletedAccount = await accountModel.delete(accountId, userId);
 
-export default { getAccounts, getAccount, createAccount, deleteAccount };
+  return deletedAccount;
+};
+
+export default {
+  getAccounts,
+  getAccount,
+  createAccount,
+  updateAccount,
+  deleteAccount,
+};
