@@ -23,12 +23,12 @@ app.use(express.json());
 // api routes
 app.use('/api', routes);
 
-import { fileURLToPath } from 'url';
-import path from 'path';
-import fs from 'fs';
-import { mkdir } from 'fs/promises';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// import { fileURLToPath } from 'url';
+// import path from 'path';
+// import fs from 'fs';
+// import { mkdir } from 'fs/promises';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 // const uploadDir = path.join(__dirname, 'public', 'files');
 

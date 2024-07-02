@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import accountsRouter from './accountRoutes.js';
+import accountRouter from './accountRoutes.js';
 import authRouter from './auth.js';
 import usersRouter from './users.js';
 import healthRouter from './health.js';
@@ -17,6 +17,6 @@ router.use('/', healthRouter);
 router.use('/', authenticate, usersRouter);
 router.use('/', authenticate, transactionsRouter);
 router.use('/', authenticate, categoriesRouter);
-router.use('/', authenticate, accountsRouter);
+router.use('/', authenticate, accountRouter);
 
 export default router;

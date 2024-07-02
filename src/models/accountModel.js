@@ -5,7 +5,11 @@ import dbService from '../services/dbService.js';
 class AccountModel {
   findAll = async (userId) => {
     const query = {
-      text: 'SELECT * FROM accounts WHERE user_id = $1;',
+      text: `
+        SELECT account_id, number, name, type, institution, user_id
+        FROM accounts
+        WHERE user_id = $1;
+      `,
       values: [userId],
     };
     return await dbService.query(query);
@@ -13,7 +17,11 @@ class AccountModel {
 
   findOne = async (userId, accountId) => {
     const query = {
-      text: 'SELECT * FROM accounts WHERE account_id = $1 AND user_ID = $2;',
+      text: `
+        SELECT account_id, number, name, type, institution, user_id
+        FROM accounts
+        WHERE account_id = $1 AND user_ID = $2;
+      `,
       values: [accountId, userId],
     };
     const rows = await dbService.query(query);
@@ -22,14 +30,26 @@ class AccountModel {
     }
   };
 
-  create = async (accountNumber, accountName, accountInstitution, userId) => {
+  create = async (
+    accountNumber,
+    accountName,
+    accountType,
+    accountInstitution,
+    userId
+  ) => {
     const query = {
       text: `
-        INSERT INTO accounts(number, name, institution, user_id) 
-        VALUES($1, $2, $3, $4)
-        RETURNING account_id, number, name, institution, user_id;
+        INSERT INTO accounts(number, name, type, institution, user_id) 
+        VALUES($1, $2, $3, $4, $5)
+        RETURNING account_id, number, name, type, institution, user_id;
       `,
-      values: [accountNumber, accountName, accountInstitution, userId],
+      values: [
+        accountNumber,
+        accountName,
+        accountType,
+        accountInstitution,
+        userId,
+      ],
     };
     const rows = await dbService.query(query);
     if (rows && rows.length === 1) {
@@ -41,6 +61,7 @@ class AccountModel {
     accountId,
     accountNumber,
     accountName,
+    accountType,
     accountInstitution,
     userId
   ) => {
@@ -50,13 +71,15 @@ class AccountModel {
         SET
           number = $1, 
           name = $2,
-          institution = $3 
-        WHERE account_id = $4 and user_id = $5
-        RETURNING account_id, number, name, institution, user_id;
+          type = $3,
+          institution = $4
+        WHERE account_id = $5 and user_id = $6
+        RETURNING account_id, number, name, type, institution, user_id;
       `,
       values: [
         accountNumber,
         accountName,
+        accountType,
         accountInstitution,
         accountId,
         userId,
@@ -73,7 +96,7 @@ class AccountModel {
       text: `
         DELETE FROM accounts
         WHERE account_id = $1 AND user_id = $2 
-        RETURNING account_id, number, name, institution, user_id;
+        RETURNING account_id, number, name, type, institution, user_id;
       `,
       values: [accountId, userId],
     };
