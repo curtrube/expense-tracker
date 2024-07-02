@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
+import accountsRouter from './accountRoutes.js';
 import authRouter from './auth.js';
 import usersRouter from './users.js';
 import healthRouter from './health.js';
-import accountsRouter from './accounts.js';
 import categoriesRouter from './categories.js';
 import transactionsRouter from './transactions.js';
 import errorRouter from './error.js';

@@ -1,18 +1,5 @@
 import AccountModel from '../models/accountModel.js';
 
-const validateAccountData = (data) => {
-  if (!data) return false;
-
-  const requiredProps = ['number', 'name', 'institution', 'userId'];
-  for (const prop of requiredProps) {
-    if (!data.hasOwnProperty(prop)) {
-      throw new Error(`Account data missing prop: ${prop}`);
-    }
-  }
-
-  return true;
-};
-
 const getAccounts = async (userId) => {
   const accountModel = new AccountModel();
   const dbAccounts = await accountModel.findAll(userId);
@@ -44,10 +31,14 @@ const getAccount = async (userId, accountId) => {
 };
 
 const createAccount = async (accountData) => {
-  if (!validateAccountData(accountData)) {
-    throw new Error('createAccount() failed invalid account data');
+  const requiredProps = ['number', 'name', 'institution', 'userId'];
+  for (const prop of requiredProps) {
+    if (!accountData.hasOwnProperty(prop)) {
+      const error = new Error(`Account data missing prop: ${prop}`);
+      error.status = 400;
+      throw error;
+    }
   }
-
   const { number, name, institution, userId } = accountData;
   const accountModel = new AccountModel();
   const account = await accountModel.create(number, name, institution, userId);
