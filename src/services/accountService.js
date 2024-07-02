@@ -31,7 +31,7 @@ const getAccount = async (userId, accountId) => {
 };
 
 const createAccount = async (accountData) => {
-  const requiredProps = ['number', 'name', 'institution', 'userId'];
+  const requiredProps = ['number', 'name', 'type', 'institution', 'userId'];
   for (const prop of requiredProps) {
     if (!accountData.hasOwnProperty(prop)) {
       const error = new Error(`Account data missing prop: ${prop}`);
@@ -39,9 +39,15 @@ const createAccount = async (accountData) => {
       throw error;
     }
   }
-  const { number, name, institution, userId } = accountData;
+  const { number, name, type, institution, userId } = accountData;
   const accountModel = new AccountModel();
-  const account = await accountModel.create(number, name, institution, userId);
+  const account = await accountModel.create(
+    number,
+    name,
+    type,
+    institution,
+    userId
+  );
 
   return account;
 };
@@ -51,6 +57,7 @@ const updateAccount = async (accountData) => {
     'accountId',
     'number',
     'name',
+    'type',
     'institution',
     'userId',
   ];
@@ -59,13 +66,14 @@ const updateAccount = async (accountData) => {
       throw new Error(`Error updating account missing prop: ${prop}`);
     }
   }
-  const { accountId, number, name, institution, userId } = accountData;
+  const { accountId, number, name, type, institution, userId } = accountData;
 
   const accountModel = new AccountModel();
   const account = await accountModel.update(
     accountId,
     number,
     name,
+    type,
     institution,
     userId
   );
