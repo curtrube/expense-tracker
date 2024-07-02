@@ -1,7 +1,6 @@
-import AccountModel from '../models/accountModel.js';
 import accountService from '../services/accountService.js';
 
-export const getAccounts = async (req, res) => {
+const getAccounts = async (req, res) => {
   const userId = req.user?.user_id;
   if (!userId) {
     res.status(400).json({ message: 'userId required' });
@@ -22,7 +21,7 @@ export const getAccounts = async (req, res) => {
   }
 };
 
-export const getAccount = async (req, res) => {
+const getAccount = async (req, res) => {
   const userId = req.user?.user_id;
   const accountId = req.params?.id;
 
@@ -46,19 +45,23 @@ export const getAccount = async (req, res) => {
   }
 };
 
-export const createAccount = async (req, res) => {
+const createAccount = async (req, res) => {
   const accountData = { ...req.body, userId: req.user?.user_id };
-  const newAccount = await accountService.createAccount(accountData);
   try {
+    const newAccount = await accountService.createAccount(accountData);
     if (newAccount) {
       res.status(201).json(newAccount);
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    if (err.status === 400) {
+      res.status(400).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
 };
 
-export const updateAccount = async (req, res) => {
+const updateAccount = async (req, res) => {
   const accountData = {
     accountId: req.params?.id,
     ...req.body,
@@ -67,14 +70,14 @@ export const updateAccount = async (req, res) => {
   try {
     const updatedAccount = await accountService.updateAccount(accountData);
     if (updatedAccount) {
-      res.status(201).json(updatedAccount);
+      res.status(200).json(updatedAccount);
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-export const deleteAccount = async (req, res) => {
+const deleteAccount = async (req, res) => {
   const accountId = req.params?.id;
   const userId = req.user?.user_id;
   try {
@@ -83,9 +86,17 @@ export const deleteAccount = async (req, res) => {
       userId
     );
     if (deletedAccount) {
-      res.status(202).json(deletedAccount);
+      res.sendStatus(204);
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+
+export default {
+  getAccounts,
+  getAccount,
+  createAccount,
+  updateAccount,
+  deleteAccount,
 };
