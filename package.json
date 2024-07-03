@@ -22,7 +22,9 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
+    "@eslint/js": "^9.6.0",
+    "@stylistic/eslint-plugin-js": "^2.3.0",
+    "globals": "^15.8.0",
     "nodemon": "^3.0.1"
   }
 }
