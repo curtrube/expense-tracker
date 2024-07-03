@@ -1,3 +1,4 @@
+import globals from 'globals';
 import eslint from '@eslint/js';
 import stylisticJs from '@stylistic/eslint-plugin-js';
 
@@ -8,6 +9,9 @@ export default [
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
     },
     plugins: {
       '@stylistic/js': stylisticJs,
