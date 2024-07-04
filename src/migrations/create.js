@@ -80,13 +80,7 @@ async function up() {
     );
   `;
 
-  const tables = [
-    usersTable,
-    refreshTokensTable,
-    categoriesTable,
-    accountsTable,
-    transactionsTable,
-  ];
+  const tables = [usersTable, refreshTokensTable, categoriesTable, accountsTable, transactionsTable];
 
   for (const table of tables) {
     console.log(await dbService.query(table));
@@ -94,13 +88,7 @@ async function up() {
 }
 
 async function down() {
-  const tables = [
-    'transactions',
-    'categories',
-    'accounts',
-    'refresh_tokens',
-    'users',
-  ];
+  const tables = ['transactions', 'categories', 'accounts', 'refresh_tokens', 'users'];
 
   for (const table of tables) {
     const sql = `DROP TABLE ${table}`;
@@ -109,4 +97,4 @@ async function down() {
 }
 
 await up();
-//await down();
+await down();

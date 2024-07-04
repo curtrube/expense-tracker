@@ -1,11 +1,10 @@
-import express from 'express';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import express from 'express';
+
 import { corsOptions } from './configs/corsOptions.js';
 import { logger } from './middleware/logEvents.js';
 import routes from './routes/index.js';
-import cookieParser from 'cookie-parser';
-import { createUser } from './controllers/userController.js';
-import multer from 'multer';
 
 const app = express();
 const port = process.env.PORT || 3000;

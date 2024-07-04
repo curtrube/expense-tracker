@@ -1,4 +1,5 @@
 import pg from 'pg';
+
 import { dbConfig } from '../configs/dbConfig.js';
 
 class DBService {

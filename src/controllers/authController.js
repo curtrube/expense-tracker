@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import UserModel from '../models/userModel.js';
+
 import RefreshTokenModel from '../models/refreshTokenModel.js';
+import UserModel from '../models/userModel.js';
 import {
   generateAccessToken,
   generateRefreshToken,
