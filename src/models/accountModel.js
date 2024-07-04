@@ -1,7 +1,5 @@
 import dbService from '../services/dbService.js';
 
-// TODO: add account type
-
 class AccountModel {
   findAll = async (userId) => {
     const query = {
@@ -30,26 +28,14 @@ class AccountModel {
     }
   };
 
-  create = async (
-    accountNumber,
-    accountName,
-    accountType,
-    accountInstitution,
-    userId
-  ) => {
+  create = async (accountNumber, accountName, accountType, accountInstitution, userId) => {
     const query = {
       text: `
         INSERT INTO accounts(number, name, type, institution, user_id) 
         VALUES($1, $2, $3, $4, $5)
         RETURNING account_id, number, name, type, institution, user_id;
       `,
-      values: [
-        accountNumber,
-        accountName,
-        accountType,
-        accountInstitution,
-        userId,
-      ],
+      values: [accountNumber, accountName, accountType, accountInstitution, userId],
     };
     const rows = await dbService.query(query);
     if (rows && rows.length === 1) {
@@ -57,14 +43,7 @@ class AccountModel {
     }
   };
 
-  update = async (
-    accountId,
-    accountNumber,
-    accountName,
-    accountType,
-    accountInstitution,
-    userId
-  ) => {
+  update = async (accountId, accountNumber, accountName, accountType, accountInstitution, userId) => {
     const query = {
       text: `
         UPDATE accounts 
@@ -76,14 +55,7 @@ class AccountModel {
         WHERE account_id = $5 and user_id = $6
         RETURNING account_id, number, name, type, institution, user_id;
       `,
-      values: [
-        accountNumber,
-        accountName,
-        accountType,
-        accountInstitution,
-        accountId,
-        userId,
-      ],
+      values: [accountNumber, accountName, accountType, accountInstitution, accountId, userId],
     };
     const rows = await dbService.query(query);
     if (rows && rows.length === 1) {
