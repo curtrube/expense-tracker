@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { mkdir, appendFile } from 'fs/promises';
+import { appendFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 

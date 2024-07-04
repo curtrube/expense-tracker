@@ -1,5 +1,6 @@
-import error from '../controllers/errorController.js';
 import { Router } from 'express';
+
+import error from '../controllers/errorController.js';
 
 const router = Router();
 

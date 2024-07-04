@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
+import { authenticate } from '../middleware/auth.js';
 import accountRouter from './accountRoutes.js';
 import authRouter from './auth.js';
-import usersRouter from './users.js';
-import healthRouter from './health.js';
 import categoriesRouter from './categories.js';
+// import errorRouter from './error.js';
+import healthRouter from './health.js';
 import transactionsRouter from './transactions.js';
-import errorRouter from './error.js';
-import { authenticate } from '../middleware/auth.js';
+import usersRouter from './users.js';
 
 const router = Router();
 

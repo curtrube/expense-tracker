@@ -76,20 +76,8 @@ const createUsersTable = async () => {
   console.log(await dbService.query(sql));
 };
 
-// await createDatabase();
-// await createCategoryTable();
-// await createAccountsTable();
-// await createUsersTable();
-// await createTransactionsTable();
-
-create table refresh_tokens (
-	refresh_token_id uuid DEFAULT gen_random_uuid() not null UNIQUE,
-	user_id uuid not null,
-	refresh_token varchar(255),
-	CONSTRAINT refresh_tokens_pkey PRIMARY KEY (refresh_token_id),
-	CONSTRAINT user_id FOREIGN KEY (user_id)
-		REFERENCES public.users (user_id) MATCH SIMPLE
-		ON UPDATE NO ACTION
-		ON DELETE NO ACTION
-
-)
+await createDatabase();
+await createCategoryTable();
+await createAccountsTable();
+await createUsersTable();
+await createTransactionsTable();
