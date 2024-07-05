@@ -5,7 +5,7 @@ const getAccounts = async (userId) => {
   const dbAccounts = await accountModel.findAll(userId);
   if (!dbAccounts) {
     const error = new Error('No accounts found');
-    error.status(404);
+    error.status = 404;
     throw error;
   } else {
     const accounts = dbAccounts.map((account) => {
