@@ -1,7 +1,7 @@
 import dbService from '../services/dbService.js';
 
 class TransactionModel {
-  findAll = async () => {
+  findAll = async (userId) => {
     const query = {
       text: `
         SELECT 
@@ -13,15 +13,17 @@ class TransactionModel {
           accounts.name as account,
           categories.name as category
         FROM transactions
-          LEFT JOIN users on (transactions.user_id = users.user_id)
-          LEFT JOIN accounts on (transactions.account_id = accounts.account_id)
-          LEFT JOIN categories on (transactions.category_id = categories.category_id);
+        LEFT JOIN users on (transactions.user_id = users.user_id)
+        LEFT JOIN accounts on (transactions.account_id = accounts.account_id)
+        LEFT JOIN categories on (transactions.category_id = categories.category_id)
+        WHERE transactions.user_id = $1;
       `,
+      values: [userId],
     };
     return await dbService.query(query);
   };
 
-  findOne = async (transactionId) => {
+  findOne = async (transactionId, userId) => {
     const query = {
       text: `
         SELECT 
@@ -33,12 +35,12 @@ class TransactionModel {
           accounts.name as account,
           categories.name as category
         FROM transactions
-          LEFT JOIN users on (transactions.user_id = users.user_id)
-          LEFT JOIN accounts on (transactions.account_id = accounts.account_id)
-          LEFT JOIN categories on (transactions.category_id = categories.category_id)
-        WHERE transaction_id = $1;
+        LEFT JOIN users on (transactions.user_id = users.user_id)
+        LEFT JOIN accounts on (transactions.account_id = accounts.account_id)
+        LEFT JOIN categories on (transactions.category_id = categories.category_id)
+        WHERE transaction_id = $1 AND transactions.user_id = $2;
       `,
-      values: [transactionId],
+      values: [transactionId, userId],
     };
     const rows = await dbService.query(query);
     if (rows && rows.length === 1) {
@@ -75,15 +77,7 @@ class TransactionModel {
     }
   };
 
-  update = async (
-    transactionId,
-    merchant,
-    amount,
-    date,
-    userId,
-    accountId,
-    categoryId
-  ) => {
+  update = async (transactionId, merchant, amount, date, userId, accountId, categoryId) => {
     const query = {
       text: `
         UPDATE transactions
@@ -94,7 +88,7 @@ class TransactionModel {
           user_id = $4,
           account_id = $5,
           category_id = $6 
-        WHERE transaction_id = $7 
+        WHERE transaction_id = $7 AND user_id = $4
         RETURNING
           transaction_id,
           merchant,
@@ -104,15 +98,7 @@ class TransactionModel {
           account_id,
           category_id;
       `,
-      values: [
-        merchant,
-        amount,
-        date,
-        userId,
-        accountId,
-        categoryId,
-        transactionId,
-      ],
+      values: [merchant, amount, date, userId, accountId, categoryId, transactionId],
     };
     const rows = await dbService.query(query);
     if (rows && rows.length === 1) {
@@ -120,11 +106,11 @@ class TransactionModel {
     }
   };
 
-  delete = async (transactionId) => {
+  delete = async (transactionId, userId) => {
     const query = {
       text: `
         DELETE FROM transactions
-        WHERE transaction_id = $1 
+        WHERE transaction_id = $1 AND user_id = $2
         RETURNING
           transaction_id,
           merchant,
@@ -133,7 +119,7 @@ class TransactionModel {
           account_id,
           category_id;
       `,
-      values: [transactionId],
+      values: [transactionId, userId],
     };
     const rows = await dbService.query(query);
     if (rows && rows.length === 1) {
