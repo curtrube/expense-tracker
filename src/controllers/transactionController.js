@@ -22,7 +22,7 @@ const getTransaction = async (req, res) => {
     if (!transaction) {
       res.status(204).json({ message: `No transaction with Id: ${transactionId}` });
     } else {
-      res.status(200).json({ transaction });
+      res.status(200).json(transaction);
     }
   } catch (err) {
     console.error(`unable to get transaction with Id: ${transactionId}: ${err.message}`);

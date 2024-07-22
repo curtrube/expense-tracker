@@ -20,7 +20,7 @@ class DBService {
         return result.rows;
       }
     } catch (err) {
-      console.error(err);
+      console.error(`querying the database: ${err.message}`);
     } finally {
       client.release();
     }
