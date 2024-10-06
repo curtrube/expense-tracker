@@ -10,28 +10,28 @@ exports.shorthands = undefined;
  */
 exports.up = (pgm) => {
   pgm.createTable('users', {
-    id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
+    user_id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
     username: { type: 'text', notNull: true, unique: true },
-    firstName: { type: 'text' },
-    lastName: { type: 'text' },
+    first_name: { type: 'text' },
+    last_name: { type: 'text' },
     password: { type: 'text', notNull: true },
   });
 
   pgm.createTable('refresh_tokens', {
-    id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
+    refresh_token_id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
     refresh_token: { type: 'text' },
     user_id: { type: 'uuid', references: 'users' },
   });
 
   pgm.createTable('categories', {
-    id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
+    category_id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
     name: { type: 'text', notNull: true },
     description: { type: 'text' },
     user_id: { type: 'uuid', references: 'users' },
   });
 
   pgm.createTable('accounts', {
-    id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
+    account_id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
     number: { type: 'integer', notNull: true },
     name: { type: 'text', notNull: true },
     type: { type: 'text' },
@@ -40,7 +40,7 @@ exports.up = (pgm) => {
   });
 
   pgm.createTable('transactions', {
-    id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
+    transaction_id: { type: 'uuid', notNull: true, unique: true, primaryKey: true },
     merchant: { type: 'text', notNull: true },
     amount: { type: 'double precision', notNull: true },
     date: { type: 'date', notNull: true },
